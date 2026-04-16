@@ -1,5 +1,8 @@
 { pkgs, lib, ... }:
 
+let
+  openssh-sk-standalone = import ./pkgs/openssh-sk-standalone.nix { inherit pkgs; };
+in
 {
   imports = [
     ../../home/default.nix
@@ -22,5 +25,10 @@
     switch = "cd ~/.nixos && git pull && nh darwin switch && cd -";
   };
 
-  services.ssh-agent.enable = true;
+  # add fido2 support for ssh
+  programs.ssh.extraConfig = ''
+    SecurityKeyProvider ${openssh-sk-standalone}/lib/sk-libfido2.dylib
+  '';
+
+  # home.sessionVariables.SSH_SK_PROVIDER = "${openssh-sk-standalone}/lib/sk-libfido2.dylib";
 }

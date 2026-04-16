@@ -6,6 +6,9 @@
   ...
 }:
 
+let
+  openssh-sk-standalone = import ./pkgs/openssh-sk-standalone.nix { inherit pkgs; };
+in
 {
   imports = [ ];
 
@@ -30,16 +33,41 @@
 
     # Misc
     mosh
+
+    # enable openssh
+    openssh
   ];
+
+  system.primaryUser = "blakeh";
+
+  # setup ssh agent
+  launchd.user.agents.ssh-agent = {
+    command = "${pkgs.openssh}/bin/ssh-agent -D -a /tmp/ssh-agent.socket -P ${openssh-sk-standalone}/lib/sk-libfido2.dylib";
+    serviceConfig.KeepAlive = true;
+    serviceConfig.RunAtLoad = true;
+    serviceConfig.EnvironmentVariables = {
+      SSH_ASKPASS = "/etc/ssh-askpass";
+      SSH_ASKPASS_REQUIRE = "prefer";
+      DISPLAY = ":0";
+    };
+  };
+  environment.variables.SSH_AUTH_SOCK = "/tmp/ssh-agent.socket";
+
+  # add yubikey
+  environment.etc."ssh-askpass".source = pkgs.writeScript "ssh-askpass" ''
+    #!/bin/bash
+    if echo "$1" | grep -q "PIN"; then
+      /usr/bin/osascript -e 'display dialog "'"$1"'" default answer "" with hidden answer' -e 'text returned of result'
+    else
+      echo ""
+    fi
+  '';
 
   # setup nix helper
   environment.variables.NH_FLAKE = "/Users/blakeh/.nixos";
 
   environment.variables.EDITOR = "vim";
   environment.variables.VISUAL = "vim";
-
-  # fix ssh agent
-  environment.variables.SSH_SK_PROVIDER = "/usr/local/lib/sk-libfido2.dylib";
 
   programs.nix-index-database.comma.enable = true;
 
