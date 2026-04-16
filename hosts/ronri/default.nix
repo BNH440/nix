@@ -11,6 +11,7 @@
     ./networking.nix
     ./web/default.nix
     ../../modules/default.nix
+    ./cache.nix
   ];
 
   # Enable QEMU guest agent for Proxmox
