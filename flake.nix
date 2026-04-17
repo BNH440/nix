@@ -175,6 +175,11 @@
         };
       };
 
+      nix.settings = {
+        substituters = [ "https://nixcache.blakehaug.com" ];
+        trusted-public-keys = [ "nixcache.blakehaug.com:HA3O9E/cMwqguJQmIW49lnCTd7f8K6FnQC2aU0cPIxc=" ];
+      };
+
       agenix-rekey = agenix-rekey.configure {
         userFlake = self;
         nixosConfigurations = self.nixosConfigurations;
