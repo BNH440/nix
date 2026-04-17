@@ -3,6 +3,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 
@@ -33,6 +34,9 @@ in
 
     # Misc
     mosh
+
+    # Cache
+    inputs.attic.packages.${pkgs.system}.attic-client
 
     # enable openssh
     openssh
@@ -73,6 +77,10 @@ in
 
   # Necessary for using flakes on this system.
   nix.settings.experimental-features = "nix-command flakes";
+
+  # Binary cache
+  nix.settings.substituters = [ "https://nixcache.blakehaug.com/main" ];
+  nix.settings.trusted-public-keys = [ "main:gMJfiUKchtX1jmnXVUA3t54OMNLfCsTrj2nytssdU7A=" ];
 
   # Set Git commit hash for darwin-version.
   system.configurationRevision = self.rev or self.dirtyRev or null;

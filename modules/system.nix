@@ -16,6 +16,24 @@
     "flakes"
   ];
 
+  # Binary cache
+  nix.settings.substituters = [ "https://nixcache.blakehaug.com/main" ];
+  nix.settings.trusted-public-keys = [ "main:gMJfiUKchtX1jmnXVUA3t54OMNLfCsTrj2nytssdU7A=" ];
+
+  # Attic cache push credentials
+  age.secrets.attic-auth-token.rekeyFile = ../secrets/attic-auth-token.age;
+  nix.settings.post-build-hook =
+    let
+      upload-script = pkgs.writeScript "attic-upload" ''
+        #!/bin/sh
+        set -eu
+        set -f
+        export ATTIC_TOKEN="$(cat ${config.age.secrets.attic-auth-token.path})"
+        ${inputs.attic.packages.${pkgs.system}.attic-client}/bin/attic push main $OUT_PATHS
+      '';
+    in
+    "${upload-script}";
+
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
 

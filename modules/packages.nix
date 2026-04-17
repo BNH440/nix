@@ -23,6 +23,9 @@
     nil
     nixd
 
+    # Cache
+    inputs.attic.packages.${pkgs.system}.attic-client
+
     inputs.neovim-flake.packages.${pkgs.system}.default
   ];
 

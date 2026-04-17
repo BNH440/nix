@@ -54,6 +54,7 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    attic.url = "github:zhaofengli/attic";
   };
 
   outputs =
@@ -77,6 +78,7 @@
       nix-flatpak,
       aagl,
       zen-browser,
+      attic,
       ...
     }@inputs:
     let
@@ -99,6 +101,7 @@
             ./hosts/ronri/default.nix
             agenix.nixosModules.default
             agenix-rekey.nixosModules.default
+            attic.nixosModules.atticd
             nix-index-database.nixosModules.default
             home-manager.nixosModules.home-manager
             {
@@ -173,11 +176,6 @@
             buildOnTarget = true;
           };
         };
-      };
-
-      nix.settings = {
-        substituters = [ "https://nixcache.blakehaug.com" ];
-        trusted-public-keys = [ "nixcache.blakehaug.com:HA3O9E/cMwqguJQmIW49lnCTd7f8K6FnQC2aU0cPIxc=" ];
       };
 
       agenix-rekey = agenix-rekey.configure {
