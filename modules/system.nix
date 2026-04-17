@@ -26,10 +26,8 @@
     let
       upload-script = pkgs.writeScript "attic-upload" ''
         #!/bin/sh
-        set -eu
         set -f
-        export ATTIC_TOKEN="$(cat ${config.age.secrets.attic-auth-token.path})"
-        ${inputs.attic.packages.${pkgs.system}.attic-client}/bin/attic push main $OUT_PATHS
+        ${inputs.attic.packages.${pkgs.system}.attic-client}/bin/attic push main $OUT_PATHS || true
       '';
     in
     "${upload-script}";
