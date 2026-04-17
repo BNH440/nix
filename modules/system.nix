@@ -20,17 +20,29 @@
   nix.settings.substituters = [ "https://nixcache.blakehaug.com/main" ];
   nix.settings.trusted-public-keys = [ "main:gMJfiUKchtX1jmnXVUA3t54OMNLfCsTrj2nytssdU7A=" ];
 
-  # Attic cache push credentials
   age.secrets.attic-auth-token.rekeyFile = ../secrets/attic-auth-token.age;
-  nix.settings.post-build-hook =
+
+  systemd.services.attic-watch-store =
     let
-      upload-script = pkgs.writeScript "attic-upload" ''
-        #!/bin/sh
-        set -f
-        ${inputs.attic.packages.${pkgs.system}.attic-client}/bin/attic push main $OUT_PATHS || true
-      '';
+      attic-client = inputs.attic.packages.${pkgs.system}.attic-client;
     in
-    "${upload-script}";
+    {
+      description = "Attic watch-store";
+      after = [
+        "network-online.target"
+        "agenix.service"
+      ];
+      wants = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        ExecStartPre = "${pkgs.writeShellScript "attic-login" ''
+          ${attic-client}/bin/attic login --set-default nixcache https://nixcache.blakehaug.com "$(cat ${config.age.secrets.attic-auth-token.path})"
+        ''}";
+        ExecStart = "${attic-client}/bin/attic watch-store main";
+        Restart = "on-failure";
+        RestartSec = 5;
+      };
+    };
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
