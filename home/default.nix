@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  inputs,
   ...
 }:
 
@@ -36,6 +37,7 @@
     yubikey-manager
     yt-dlp
     claude-code
+    inputs.tsexit.packages.${pkgs.system}.default
   ];
 
   home.shellAliases = {

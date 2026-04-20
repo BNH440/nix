@@ -55,6 +55,10 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     attic.url = "github:zhaofengli/attic";
+    tsexit = {
+      url = "github:bnh440/tsexit";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs =
@@ -79,6 +83,7 @@
       aagl,
       zen-browser,
       attic,
+      tsexit,
       ...
     }@inputs:
     let
@@ -109,6 +114,7 @@
               home-manager.useUserPackages = true;
               home-manager.users.blakeh = ./home/default.nix;
               home-manager.backupFileExtension = "hm-backup";
+              home-manager.extraSpecialArgs = { inherit inputs; };
             }
           ];
         };
@@ -129,6 +135,7 @@
               home-manager.useUserPackages = true;
               home-manager.users.blakeh = ./hosts/ito/home.nix;
               home-manager.backupFileExtension = "hm-backup";
+              home-manager.extraSpecialArgs = { inherit inputs; };
             }
           ];
         };
@@ -146,6 +153,7 @@
             home-manager.useUserPackages = true;
             home-manager.users.blakeh = ./hosts/hikari/home.nix;
             home-manager.backupFileExtension = "hm-backup";
+            home-manager.extraSpecialArgs = { inherit inputs; };
           }
         ];
       };
