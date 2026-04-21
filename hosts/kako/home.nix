@@ -9,4 +9,6 @@
     username = "ubuntu";
     homeDirectory = "/home/ubuntu";
   };
+
+  nixpkgs.config.allowUnfree = true;
 }
