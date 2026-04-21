@@ -158,6 +158,13 @@
         ];
       };
 
+      # home manager config for kako
+      homeConfigurations.blakeh = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.aarch64-linux;
+        modules = [ ./hosts/kako/home.nix ];
+        extraSpecialArgs = { inherit inputs; };
+      };
+
       colmenaHive = colmena.lib.makeHive {
         meta = {
           nixpkgs = import nixpkgs { system = "x86_64-linux"; };
