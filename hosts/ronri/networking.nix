@@ -40,7 +40,8 @@
   ];
   networking.defaultGateway = "169.229.226.1";
 
-  # Open minecraft ports
+  # Open ports
   # networking.firewall.allowedTCPPorts = [ 25565 ];
   # networking.firewall.allowedUDPPorts = [ 25565 ];
+  networking.firewall.allowedTCPPorts = [ 8888 ];
 }
