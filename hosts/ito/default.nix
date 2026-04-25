@@ -14,6 +14,7 @@
     ./nvidia.nix
     ./input.nix
     ./audio.nix
+    ./boot.nix
     ../../modules/default.nix
   ];
 

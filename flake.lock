@@ -548,7 +548,7 @@
       "inputs": {
         "crane": "crane_2",
         "nixpkgs": [
-          "nixpkgs"
+          "nixpkgs-unstable"
         ],
         "pre-commit": "pre-commit",
         "rust-overlay": "rust-overlay_2"
