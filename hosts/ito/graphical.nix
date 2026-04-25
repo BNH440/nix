@@ -40,6 +40,7 @@
     jellyfin-desktop
     transmission_4-qt6
     gimp
+    davinci-resolve
 
     # Gaming
     lutris
