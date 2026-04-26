@@ -62,5 +62,8 @@
   # enable bluetooth
   hardware.bluetooth.enable = true;
 
+  # add udev rules for flashing qmk firmware
+  services.udev.packages = [ pkgs.qmk-udev-rules ];
+
   system.stateVersion = "25.11";
 }
