@@ -38,6 +38,7 @@
     after = [ "agenix.service" ];
     wants = [ "agenix.service" ];
   };
+  services.zfs.autoScrub.enable = true;
 
   # yubikey support
   services.pcscd.enable = true;
