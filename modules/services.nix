@@ -16,6 +16,7 @@
     # Require pubkey auth
     settings.PasswordAuthentication = false;
     settings.KbdInteractiveAuthentication = false;
+    settings.PermitRootLogin = "no";
   };
 
   # Tailscale config
