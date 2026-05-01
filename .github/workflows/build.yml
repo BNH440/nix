@@ -39,7 +39,7 @@ jobs:
           ATTIC_ENDPOINT: ${{ vars.ATTIC_ENDPOINT }}
           ATTIC_CACHE: ${{ vars.ATTIC_CACHE }}
         run: |
-          nix profile install github:zhaofengli/attic
+          nix profile install nixpkgs#attic-client
           attic login ci "$ATTIC_ENDPOINT" "$ATTIC_TOKEN"
           attic use "ci:$ATTIC_CACHE"
 
