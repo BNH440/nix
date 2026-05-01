@@ -1,0 +1,61 @@
+name: Build and cache
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1" # weekly rebuild to keep in cache
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: darwinConfigurations.hikari.system
+            os: macos-latest
+          - target: nixosConfigurations.ronri.config.system.build.toplevel
+            os: ubuntu-latest
+          - target: nixosConfigurations.ito.config.system.build.toplevel
+            os: ubuntu-latest
+          - target: homeConfigurations.blakeh.activationPackage
+            os: ubuntu-24.04-arm
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          extra-conf: |
+            experimental-features = nix-command flakes
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install and configure Attic
+        env:
+          ATTIC_TOKEN: ${{ secrets.ATTIC_TOKEN }}
+          ATTIC_ENDPOINT: ${{ vars.ATTIC_ENDPOINT }}
+          ATTIC_CACHE: ${{ vars.ATTIC_CACHE }}
+        run: |
+          nix profile install github:zhaofengli/attic
+          attic login ci "$ATTIC_ENDPOINT" "$ATTIC_TOKEN"
+          attic use "ci:$ATTIC_CACHE"
+
+      - name: Watch store
+        env:
+          ATTIC_CACHE: ${{ secrets.ATTIC_CACHE }}
+        run: |
+          attic watch-store "ci:$ATTIC_CACHE" >/dev/null 2>&1 &
+
+      - name: Build ${{ matrix.target }}
+        run: |
+          nix build .#${{ matrix.target }} \
+            --print-build-logs \
+            --accept-flake-config
+
+      - name: Push closure
+        env:
+          ATTIC_CACHE: ${{ secrets.ATTIC_CACHE }}
+        run: attic push "ci:$ATTIC_CACHE" ./result
