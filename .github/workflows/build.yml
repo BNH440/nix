@@ -45,7 +45,7 @@ jobs:
 
       - name: Watch store
         env:
-          ATTIC_CACHE: ${{ secrets.ATTIC_CACHE }}
+          ATTIC_CACHE: ${{ vars.ATTIC_CACHE }}
         run: |
           attic watch-store "ci:$ATTIC_CACHE" >/dev/null 2>&1 &
 
@@ -57,5 +57,5 @@ jobs:
 
       - name: Push closure
         env:
-          ATTIC_CACHE: ${{ secrets.ATTIC_CACHE }}
+          ATTIC_CACHE: ${{ vars.ATTIC_CACHE }}
         run: attic push "ci:$ATTIC_CACHE" ./result
