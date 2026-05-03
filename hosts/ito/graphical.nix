@@ -9,6 +9,17 @@
 {
   imports = [ ];
 
+  # fix lutris openldap issue
+  # TODO: remove when fixed
+  # status: https://nixpk.gs/pr-tracker.html?pr=515956
+  nixpkgs.overlays = [
+    (_: prev: {
+      openldap = prev.openldap.overrideAttrs {
+        doCheck = false;
+      };
+    })
+  ];
+
   # KDE
   services.desktopManager.plasma6.enable = true;
   services.displayManager.plasma-login-manager.enable = true;
