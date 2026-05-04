@@ -14,8 +14,10 @@
   # status: https://nixpk.gs/pr-tracker.html?pr=515956
   nixpkgs.overlays = [
     (_: prev: {
-      openldap = prev.openldap.overrideAttrs {
-        doCheck = false;
+      lutris = prev.lutris.override {
+        openldap = prev.openldap.overrideAttrs {
+          doCheck = false;
+        };
       };
     })
   ];
