@@ -10,17 +10,22 @@ on:
 
 jobs:
   build:
+    name: ${{ matrix.name }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - target: darwinConfigurations.hikari.system
+          - name: hikari
+            target: darwinConfigurations.hikari.system
             os: macos-latest
-          - target: nixosConfigurations.ronri.config.system.build.toplevel
+          - name: ronri
+            target: nixosConfigurations.ronri.config.system.build.toplevel
             os: ubuntu-latest
-          - target: nixosConfigurations.ito.config.system.build.toplevel
+          - name: ito
+            target: nixosConfigurations.ito.config.system.build.toplevel
             os: ubuntu-latest
-          - target: homeConfigurations.blakeh.activationPackage
+          - name: kako
+            target: homeConfigurations.blakeh.activationPackage
             os: ubuntu-24.04-arm
 
     runs-on: ${{ matrix.os }}
@@ -53,7 +58,7 @@ jobs:
         run: |
           attic watch-store "ci:$ATTIC_CACHE" >/dev/null 2>&1 &
 
-      - name: Build ${{ matrix.target }}
+      - name: Build ${{ matrix.name }}
         run: |
           nix build .#${{ matrix.target }} \
             --print-build-logs \
