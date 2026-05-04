@@ -64,11 +64,7 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    attic = {
-      url = "github:zhaofengli/attic";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-      inputs.nixpkgs-stable.follows = "nixpkgs";
-    };
+    attic.url = "github:zhaofengli/attic";
     tsexit = {
       url = "github:bnh440/tsexit";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
