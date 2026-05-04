@@ -14,11 +14,9 @@
   # status: https://nixpk.gs/pr-tracker.html?pr=515956
   nixpkgs.overlays = [
     (_: prev: {
-      pkgsi686Linux = prev.pkgsi686Linux.extend (
-        _: prev32: {
-          openldap = prev32.openldap.overrideAttrs { doCheck = false; };
-        }
-      );
+      openldap = prev.openldap.overrideAttrs {
+        doCheck = !prev.stdenv.hostPlatform.isi686;
+      };
     })
   ];
 
