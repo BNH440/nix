@@ -8,10 +8,6 @@ on:
   schedule:
     - cron: "0 6 * * 1" # weekly rebuild to keep in cache
 
-concurrency:
-  group: build-${{ github.ref || github.head_ref }}
-  cancel-in-progress: true
-
 jobs:
   build:
     strategy:
