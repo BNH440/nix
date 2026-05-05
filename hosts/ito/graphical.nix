@@ -52,6 +52,7 @@
     transmission_4-qt6
     gimp
     davinci-resolve
+    prusa-slicer
 
     # Gaming
     lutris
