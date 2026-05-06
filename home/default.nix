@@ -38,6 +38,7 @@
     yt-dlp
     claude-code
     inputs.tsexit.packages.${pkgs.system}.default
+    teleport
   ];
 
   home.shellAliases = {
