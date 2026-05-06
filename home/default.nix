@@ -128,6 +128,10 @@
         hostname = "supernova";
         forwardAgent = true;
       };
+      "koi" = {
+        hostname = "koi";
+        forwardAgent = true;
+      };
     };
     extraConfig = ''
       # Begin CS161 instructional machine config
