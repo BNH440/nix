@@ -53,6 +53,7 @@
     gimp
     davinci-resolve
     prusa-slicer
+    bitwarden-desktop
 
     # Gaming
     lutris
