@@ -41,6 +41,17 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Free disk space
+        if: runner.os == 'Linux'
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          swap-storage: true
+
       - name: Fix action runner security config
         if: runner.os == 'Linux'
         run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
@@ -50,6 +61,8 @@ jobs:
           extra-conf: |
             experimental-features = nix-command flakes
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+            max-jobs = auto
+            cores = 0
 
       - name: Install and configure Attic
         env:
@@ -61,19 +74,17 @@ jobs:
           attic login ci "$ATTIC_ENDPOINT" "$ATTIC_TOKEN"
           attic use "ci:$ATTIC_CACHE"
 
-      - name: Watch store
+      - name: Build and push ${{ matrix.name }}
         env:
           ATTIC_CACHE: ${{ vars.ATTIC_CACHE }}
+          EVENT: ${{ github.event_name }}
         run: |
-          attic watch-store "ci:$ATTIC_CACHE" >/dev/null 2>&1 &
-
-      - name: Build ${{ matrix.name }}
-        run: |
-          nix build .#${{ matrix.target }} \
-            --print-build-logs \
-            --accept-flake-config
-
-      - name: Push closure
-        env:
-          ATTIC_CACHE: ${{ vars.ATTIC_CACHE }}
-        run: attic push "ci:$ATTIC_CACHE" ./result
+          extra_args=()
+          if [ "$EVENT" != "schedule" ]; then
+            extra_args+=(--skip-cached)
+          fi
+          nix run nixpkgs#nix-fast-build -- \
+            "${extra_args[@]}" \
+            --no-nom \
+            --flake ".#${{ matrix.target }}" \
+            --attic-cache "ci:$ATTIC_CACHE"
