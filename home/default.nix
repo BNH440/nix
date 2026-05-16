@@ -39,6 +39,7 @@
     claude-code
     inputs.tsexit.packages.${pkgs.system}.default
     teleport
+    ncdu
   ];
 
   home.shellAliases = {
