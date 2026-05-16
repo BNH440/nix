@@ -54,6 +54,7 @@
     davinci-resolve
     prusa-slicer
     bitwarden-desktop
+    graphite
 
     # Gaming
     lutris
