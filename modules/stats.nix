@@ -24,12 +24,15 @@ in
 
   config = lib.mkIf cfg.enable {
     services.prometheus.exporters.node.enable = true;
-    services.cadvisor.enable = true;
+    services.cadvisor = {
+      enable = true;
+      port = 8081;
+    };
 
     # let prometheus scrape via tailscale
     networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
       9100 # node exporter
-      8080 # cadvisor
+      8081 # cadvisor
     ];
 
     # ships the systemd journal into loki

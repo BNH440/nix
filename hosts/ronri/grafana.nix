@@ -255,7 +255,7 @@ in
         scrape_interval = "15s";
         static_configs = [
           {
-            targets = [ "127.0.0.1:8080" ];
+            targets = [ "127.0.0.1:8081" ];
           }
         ];
       }
@@ -273,7 +273,7 @@ in
         scrape_interval = "15s";
         static_configs = [
           {
-            targets = [ "ito:8080" ];
+            targets = [ "ito:8081" ];
           }
         ];
       }
