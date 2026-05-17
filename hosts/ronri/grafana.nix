@@ -1,9 +1,194 @@
 {
+  pkgs,
   ...
 }:
 
 let
   publicURL = "grafana.blakehaug.com";
+
+  # one prometheus timeseries panel
+  promTs = id: x: y: title: expr: legend: {
+    inherit id title;
+    type = "timeseries";
+    datasource = "Prometheus";
+    gridPos = {
+      inherit x y;
+      w = 12;
+      h = 8;
+    };
+    fieldConfig = {
+      defaults.custom.fillOpacity = 10;
+      overrides = [ ];
+    };
+    options = {
+      legend = {
+        displayMode = "list";
+        placement = "bottom";
+      };
+      tooltip.mode = "multi";
+    };
+    targets = [
+      {
+        refId = "A";
+        inherit expr;
+        legendFormat = legend;
+      }
+    ];
+  };
+
+  # an "include all" query template variable
+  queryVar = name: datasource: query: {
+    inherit name datasource query;
+    type = "query";
+    refresh = 2;
+    includeAll = true;
+    multi = true;
+    current = {
+      selected = false;
+      text = "All";
+      value = "$__all";
+    };
+  };
+
+  base = {
+    schemaVersion = 39;
+    timezone = "browser";
+    refresh = "30s";
+    time = {
+      from = "now-6h";
+      to = "now";
+    };
+  };
+
+  nodes = base // {
+    uid = "nodes";
+    title = "Nodes";
+    templating.list = [ (queryVar "instance" "Prometheus" "label_values(node_uname_info, instance)") ];
+    panels = [
+      (promTs 1 0 0 "CPU busy %"
+        ''100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle",instance=~"$instance"}[5m])) * 100)''
+        "{{instance}}"
+      )
+      (promTs 2 12 0 "Memory used %"
+        ''100 * (1 - node_memory_MemAvailable_bytes{instance=~"$instance"} / node_memory_MemTotal_bytes{instance=~"$instance"})''
+        "{{instance}}"
+      )
+      (promTs 3 0 8 "Load (1m)" ''node_load1{instance=~"$instance"}'' "{{instance}}")
+      (promTs 4 12 8 "Root FS used %"
+        ''100 - (node_filesystem_avail_bytes{instance=~"$instance",mountpoint="/"} * 100 / node_filesystem_size_bytes{instance=~"$instance",mountpoint="/"})''
+        "{{instance}}"
+      )
+      (promTs 5 0 16 "Net RX (B/s)"
+        ''rate(node_network_receive_bytes_total{instance=~"$instance",device!="lo"}[5m])''
+        "{{instance}} {{device}}"
+      )
+      (promTs 6 12 16 "Net TX (B/s)"
+        ''rate(node_network_transmit_bytes_total{instance=~"$instance",device!="lo"}[5m])''
+        "{{instance}} {{device}}"
+      )
+    ];
+  };
+
+  containers = base // {
+    uid = "containers";
+    title = "Containers";
+    templating.list = [ ];
+    panels = [
+      (promTs 1 0 0 "Container CPU (cores)"
+        ''sum by (name) (rate(container_cpu_usage_seconds_total{name!=""}[5m]))''
+        "{{name}}"
+      )
+      (promTs 2 12 0 "Container memory (working set)"
+        ''sum by (name) (container_memory_working_set_bytes{name!=""})''
+        "{{name}}"
+      )
+    ];
+  };
+
+  logs = base // {
+    uid = "syslogs";
+    title = "System logs";
+    time = {
+      from = "now-1h";
+      to = "now";
+    };
+    templating.list = [ (queryVar "host" "Loki" ''label_values({job="systemd-journal"}, host)'') ];
+    panels = [
+      {
+        id = 1;
+        title = "Log volume by level";
+        type = "timeseries";
+        datasource = "Loki";
+        gridPos = {
+          x = 0;
+          y = 0;
+          w = 24;
+          h = 6;
+        };
+        fieldConfig = {
+          defaults.custom = {
+            drawStyle = "bars";
+            fillOpacity = 60;
+            stacking.mode = "normal";
+          };
+          overrides = [ ];
+        };
+        options = {
+          legend = {
+            displayMode = "list";
+            placement = "bottom";
+          };
+          tooltip.mode = "multi";
+        };
+        targets = [
+          {
+            refId = "A";
+            expr = ''sum by (level) (count_over_time({job="systemd-journal", host=~"$host"} [$__auto]))'';
+            legendFormat = "{{level}}";
+          }
+        ];
+      }
+      {
+        id = 2;
+        title = "Logs";
+        type = "logs";
+        datasource = "Loki";
+        gridPos = {
+          x = 0;
+          y = 6;
+          w = 24;
+          h = 18;
+        };
+        options = {
+          showTime = true;
+          wrapLogMessage = true;
+          sortOrder = "Descending";
+          enableLogDetails = true;
+        };
+        targets = [
+          {
+            refId = "A";
+            expr = ''{job="systemd-journal", host=~"$host"}'';
+          }
+        ];
+      }
+    ];
+  };
+
+  dashboardDir = pkgs.linkFarm "grafana-dashboards" [
+    {
+      name = "nodes.json";
+      path = pkgs.writeText "nodes.json" (builtins.toJSON nodes);
+    }
+    {
+      name = "containers.json";
+      path = pkgs.writeText "containers.json" (builtins.toJSON containers);
+    }
+    {
+      name = "logs.json";
+      path = pkgs.writeText "logs.json" (builtins.toJSON logs);
+    }
+  ];
 in
 {
   imports = [ ];
@@ -39,6 +224,15 @@ in
           editable = false;
         }
       ];
+      dashboards.settings = {
+        apiVersion = 1;
+        providers = [
+          {
+            name = "default";
+            options.path = dashboardDir;
+          }
+        ];
+      };
     };
   };
 
