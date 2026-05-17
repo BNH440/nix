@@ -123,14 +123,6 @@ let
       });
     }
     {
-      name = "cadvisor.json";
-      path = pkgs.writeText "cadvisor.json" (communityDashboard {
-        id = 14282;
-        rev = 1;
-        hash = "1kfm2z43a8736c81jzir939xd58inyfbf4lh4v173bgqi85mma3n";
-      });
-    }
-    {
       name = "system-logs.json";
       path = pkgs.writeText "system-logs.json" (builtins.toJSON logs);
     }
@@ -197,31 +189,11 @@ in
         ];
       }
       {
-        job_name = "ronri-cadvisor";
-        scrape_interval = "15s";
-        static_configs = [
-          {
-            targets = [ "127.0.0.1:8081" ];
-            labels.instance = "ronri";
-          }
-        ];
-      }
-      {
         job_name = "ito-node";
         scrape_interval = "15s";
         static_configs = [
           {
             targets = [ "ito:9100" ];
-          }
-        ];
-      }
-      {
-        job_name = "ito-cadvisor";
-        scrape_interval = "15s";
-        static_configs = [
-          {
-            targets = [ "ito:8081" ];
-            labels.instance = "ito";
           }
         ];
       }

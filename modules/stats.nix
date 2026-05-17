@@ -9,7 +9,7 @@ let
 in
 {
   options.stats = {
-    enable = lib.mkEnableOption "node/cadvisor exporters and Alloy journal shipping";
+    enable = lib.mkEnableOption "node exporter and Alloy journal shipping";
 
     lokiUrl = lib.mkOption {
       type = lib.types.str;
@@ -24,15 +24,10 @@ in
 
   config = lib.mkIf cfg.enable {
     services.prometheus.exporters.node.enable = true;
-    services.cadvisor = {
-      enable = true;
-      port = 8081;
-    };
 
     # let prometheus scrape via tailscale
     networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
       9100 # node exporter
-      8081 # cadvisor
     ];
 
     # ships the systemd journal into loki
