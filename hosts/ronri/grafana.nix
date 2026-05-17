@@ -6,113 +6,51 @@
 let
   publicURL = "grafana.blakehaug.com";
 
-  # one prometheus timeseries panel
-  promTs = id: x: y: title: expr: legend: {
-    inherit id title;
-    type = "timeseries";
-    datasource = "Prometheus";
-    gridPos = {
-      inherit x y;
-      w = 12;
-      h = 8;
-    };
-    fieldConfig = {
-      defaults.custom.fillOpacity = 10;
-      overrides = [ ];
-    };
-    options = {
-      legend = {
-        displayMode = "list";
-        placement = "bottom";
-      };
-      tooltip.mode = "multi";
-    };
-    targets = [
-      {
-        refId = "A";
-        inherit expr;
-        legendFormat = legend;
-      }
-    ];
-  };
+  # community dashboard JSON, pinned by revision. Provisioned dashboards skip
+  # the import-time __inputs prompt, so swap the ${DS_*} placeholder for the
+  # datasource name (legacy string datasource fields resolve by name).
+  communityDashboard =
+    {
+      id,
+      rev,
+      hash,
+    }:
+    builtins.replaceStrings [ "\${DS_PROMETHEUS}" "\${DS_LOKI}" ] [ "Prometheus" "Loki" ] (
+      builtins.readFile (
+        pkgs.fetchurl {
+          url = "https://grafana.com/api/dashboards/${toString id}/revisions/${toString rev}/download";
+          sha256 = hash;
+        }
+      )
+    );
 
-  # an "include all" query template variable
-  queryVar = name: datasource: query: {
-    inherit name datasource query;
-    type = "query";
-    refresh = 2;
-    includeAll = true;
-    multi = true;
-    current = {
-      selected = false;
-      text = "All";
-      value = "$__all";
-    };
-  };
-
-  base = {
+  # journal logs board: no community equivalent matches {job="systemd-journal"}
+  logs = {
+    uid = "syslogs";
+    title = "System logs";
     schemaVersion = 39;
     timezone = "browser";
     refresh = "30s";
     time = {
-      from = "now-6h";
-      to = "now";
-    };
-  };
-
-  nodes = base // {
-    uid = "nodes";
-    title = "Nodes";
-    templating.list = [ (queryVar "instance" "Prometheus" "label_values(node_uname_info, instance)") ];
-    panels = [
-      (promTs 1 0 0 "CPU busy %"
-        ''100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle",instance=~"$instance"}[5m])) * 100)''
-        "{{instance}}"
-      )
-      (promTs 2 12 0 "Memory used %"
-        ''100 * (1 - node_memory_MemAvailable_bytes{instance=~"$instance"} / node_memory_MemTotal_bytes{instance=~"$instance"})''
-        "{{instance}}"
-      )
-      (promTs 3 0 8 "Load (1m)" ''node_load1{instance=~"$instance"}'' "{{instance}}")
-      (promTs 4 12 8 "Root FS used %"
-        ''100 - (node_filesystem_avail_bytes{instance=~"$instance",mountpoint="/"} * 100 / node_filesystem_size_bytes{instance=~"$instance",mountpoint="/"})''
-        "{{instance}}"
-      )
-      (promTs 5 0 16 "Net RX (B/s)"
-        ''rate(node_network_receive_bytes_total{instance=~"$instance",device!="lo"}[5m])''
-        "{{instance}} {{device}}"
-      )
-      (promTs 6 12 16 "Net TX (B/s)"
-        ''rate(node_network_transmit_bytes_total{instance=~"$instance",device!="lo"}[5m])''
-        "{{instance}} {{device}}"
-      )
-    ];
-  };
-
-  containers = base // {
-    uid = "containers";
-    title = "Containers";
-    templating.list = [ ];
-    panels = [
-      (promTs 1 0 0 "Container CPU (cores)"
-        ''sum by (name) (rate(container_cpu_usage_seconds_total{name!=""}[5m]))''
-        "{{name}}"
-      )
-      (promTs 2 12 0 "Container memory (working set)"
-        ''sum by (name) (container_memory_working_set_bytes{name!=""})''
-        "{{name}}"
-      )
-    ];
-  };
-
-  logs = base // {
-    uid = "syslogs";
-    title = "System logs";
-    time = {
       from = "now-1h";
       to = "now";
     };
-    templating.list = [ (queryVar "host" "Loki" ''label_values({job="systemd-journal"}, host)'') ];
+    templating.list = [
+      {
+        name = "host";
+        type = "query";
+        datasource = "Loki";
+        query = ''label_values({job="systemd-journal"}, host)'';
+        refresh = 2;
+        includeAll = true;
+        multi = true;
+        current = {
+          selected = false;
+          text = "All";
+          value = "$__all";
+        };
+      }
+    ];
     panels = [
       {
         id = 1;
@@ -177,16 +115,24 @@ let
 
   dashboardDir = pkgs.linkFarm "grafana-dashboards" [
     {
-      name = "nodes.json";
-      path = pkgs.writeText "nodes.json" (builtins.toJSON nodes);
+      name = "node-exporter-full.json";
+      path = pkgs.writeText "node-exporter-full.json" (communityDashboard {
+        id = 1860;
+        rev = 45;
+        hash = "11hrll7fm626ikbva5md4gm0rca537vp4xsxa9sxl1pk15s6nk0q";
+      });
     }
     {
-      name = "containers.json";
-      path = pkgs.writeText "containers.json" (builtins.toJSON containers);
+      name = "cadvisor.json";
+      path = pkgs.writeText "cadvisor.json" (communityDashboard {
+        id = 14282;
+        rev = 1;
+        hash = "1kfm2z43a8736c81jzir939xd58inyfbf4lh4v173bgqi85mma3n";
+      });
     }
     {
-      name = "logs.json";
-      path = pkgs.writeText "logs.json" (builtins.toJSON logs);
+      name = "system-logs.json";
+      path = pkgs.writeText "system-logs.json" (builtins.toJSON logs);
     }
   ];
 in
@@ -256,6 +202,7 @@ in
         static_configs = [
           {
             targets = [ "127.0.0.1:8081" ];
+            labels.instance = "ronri";
           }
         ];
       }
@@ -274,6 +221,7 @@ in
         static_configs = [
           {
             targets = [ "ito:8081" ];
+            labels.instance = "ito";
           }
         ];
       }
