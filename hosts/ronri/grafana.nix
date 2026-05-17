@@ -201,9 +201,10 @@ in
       server = {
         http_addr = "127.0.0.1";
         http_port = 3000;
-        enforce_domain = true;
         enable_gzip = true;
         domain = "${publicURL}";
+        # without this Grafana builds redirects from domain:http_port over http
+        root_url = "https://${publicURL}/";
       };
       analytics.reporting_enabled = false;
     };
@@ -320,6 +321,7 @@ in
       locations."/" = {
         proxyPass = "http://127.0.0.1:3000";
         proxyWebsockets = true;
+        recommendedProxySettings = true;
       };
     };
   };
