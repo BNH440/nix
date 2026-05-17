@@ -8,6 +8,8 @@ in
 {
   imports = [ ];
 
+  stats.enable = true;
+
   services.grafana = {
     enable = true;
     settings = {
@@ -62,17 +64,33 @@ in
           }
         ];
       }
+      {
+        job_name = "ito-node";
+        scrape_interval = "15s";
+        static_configs = [
+          {
+            targets = [ "ito:9100" ];
+          }
+        ];
+      }
+      {
+        job_name = "ito-cadvisor";
+        scrape_interval = "15s";
+        static_configs = [
+          {
+            targets = [ "ito:8080" ];
+          }
+        ];
+      }
     ];
   };
-  services.prometheus.exporters.node.enable = true;
-  services.cadvisor.enable = true;
 
-  # logs
+  # log store
   services.loki = {
     enable = true;
     configuration = {
       auth_enabled = false;
-      server.http_listen_address = "127.0.0.1";
+      server.http_listen_address = "0.0.0.0";
       common = {
         instance_addr = "127.0.0.1";
         path_prefix = "/var/lib/loki";
@@ -98,34 +116,8 @@ in
     };
   };
 
-  # ships the systemd journal into loki
-  services.alloy.enable = true;
-  environment.etc."alloy/config.alloy".text = ''
-    loki.relabel "journal" {
-      forward_to = []
-
-      rule {
-        source_labels = ["__journal__systemd_unit"]
-        target_label  = "unit"
-      }
-      rule {
-        source_labels = ["__journal_priority_keyword"]
-        target_label  = "level"
-      }
-    }
-
-    loki.source.journal "journal" {
-      relabel_rules = loki.relabel.journal.rules
-      forward_to    = [loki.write.local.receiver]
-      labels        = { job = "systemd-journal" }
-    }
-
-    loki.write "local" {
-      endpoint {
-        url = "http://127.0.0.1:3100/loki/api/v1/push"
-      }
-    }
-  '';
+  # allow pushing of logs to loki over tailscale
+  networking.firewall.interfaces."tailscale0".allowedTCPPorts = [ 3100 ];
 
   services.nginx.virtualHosts = {
     "${publicURL}" = {

@@ -67,5 +67,11 @@
   # add udev rules for flashing qmk firmware
   services.udev.packages = [ pkgs.qmk-udev-rules ];
 
+  # stats to send to grafana
+  stats = {
+    enable = true;
+    lokiUrl = "http://ronri:3100/loki/api/v1/push";
+  };
+
   system.stateVersion = "25.11";
 }

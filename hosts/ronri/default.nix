@@ -12,6 +12,7 @@
     ./web/default.nix
     ../../modules/default.nix
     ./cache.nix
+    ./grafana.nix
   ];
 
   # Enable QEMU guest agent for Proxmox
