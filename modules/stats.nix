@@ -70,7 +70,7 @@ in
 
       # let prometheus scrape via tailscale
       networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
-        config.services.prometheus.exporters.zfs.port
+        9134 # zfs
       ];
     })
   ];

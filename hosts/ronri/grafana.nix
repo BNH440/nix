@@ -113,6 +113,366 @@ let
     ];
   };
 
+  zfs = {
+    uid = "zfs";
+    title = "ZFS";
+    schemaVersion = 39;
+    timezone = "browser";
+    refresh = "30s";
+    time = {
+      from = "now-6h";
+      to = "now";
+    };
+    templating.list = [
+      {
+        name = "pool";
+        type = "query";
+        datasource = "Prometheus";
+        query = "label_values(zfs_pool_size_bytes, pool)";
+        refresh = 2;
+        includeAll = true;
+        multi = true;
+        current = {
+          selected = false;
+          text = "All";
+          value = "$__all";
+        };
+      }
+      {
+        name = "type";
+        type = "query";
+        datasource = "Prometheus";
+        query = "label_values(zfs_dataset_used_bytes, type)";
+        refresh = 2;
+        includeAll = false;
+        multi = false;
+        current = {
+          selected = false;
+          text = "filesystem";
+          value = "filesystem";
+        };
+      }
+      {
+        name = "dataset";
+        type = "query";
+        datasource = "Prometheus";
+        query = ''label_values(zfs_dataset_used_bytes{pool=~"$pool", type=~"$type"}, name)'';
+        refresh = 2;
+        includeAll = true;
+        multi = true;
+        current = {
+          selected = false;
+          text = "All";
+          value = "$__all";
+        };
+      }
+    ];
+    panels = [
+      {
+        id = 1;
+        title = "Pool health";
+        type = "stat";
+        datasource = "Prometheus";
+        gridPos = {
+          x = 0;
+          y = 0;
+          w = 6;
+          h = 4;
+        };
+        fieldConfig = {
+          defaults = {
+            mappings = [
+              {
+                type = "value";
+                options = {
+                  "0" = {
+                    text = "ONLINE";
+                    color = "green";
+                  };
+                  "1" = {
+                    text = "DEGRADED";
+                    color = "orange";
+                  };
+                  "2" = {
+                    text = "FAULTED";
+                    color = "red";
+                  };
+                  "3" = {
+                    text = "OFFLINE";
+                    color = "red";
+                  };
+                  "4" = {
+                    text = "UNAVAIL";
+                    color = "red";
+                  };
+                  "5" = {
+                    text = "REMOVED";
+                    color = "red";
+                  };
+                  "6" = {
+                    text = "SUSPENDED";
+                    color = "red";
+                  };
+                };
+              }
+            ];
+          };
+          overrides = [ ];
+        };
+        options = {
+          reduceOptions = {
+            calcs = [ "lastNotNull" ];
+            fields = "";
+            values = false;
+          };
+          orientation = "auto";
+          textMode = "auto";
+        };
+        targets = [
+          {
+            refId = "A";
+            expr = ''zfs_pool_health{pool=~"$pool"}'';
+            legendFormat = "{{pool}}";
+          }
+        ];
+      }
+      {
+        id = 2;
+        title = "Pool capacity used";
+        type = "gauge";
+        datasource = "Prometheus";
+        gridPos = {
+          x = 6;
+          y = 0;
+          w = 6;
+          h = 4;
+        };
+        fieldConfig = {
+          defaults = {
+            unit = "percentunit";
+            min = 0;
+            max = 1;
+            thresholds = {
+              mode = "absolute";
+              steps = [
+                {
+                  color = "green";
+                  value = null;
+                }
+                {
+                  color = "orange";
+                  value = 0.8;
+                }
+                {
+                  color = "red";
+                  value = 0.9;
+                }
+              ];
+            };
+          };
+          overrides = [ ];
+        };
+        options = {
+          reduceOptions = {
+            calcs = [ "lastNotNull" ];
+            fields = "";
+            values = false;
+          };
+          showThresholdLabels = false;
+          showThresholdMarkers = true;
+        };
+        targets = [
+          {
+            refId = "A";
+            expr = ''zfs_pool_allocated_bytes{pool=~"$pool"} / zfs_pool_size_bytes{pool=~"$pool"}'';
+            legendFormat = "{{pool}}";
+          }
+        ];
+      }
+      {
+        id = 3;
+        title = "Pool fragmentation";
+        type = "stat";
+        datasource = "Prometheus";
+        gridPos = {
+          x = 12;
+          y = 0;
+          w = 6;
+          h = 4;
+        };
+        fieldConfig = {
+          defaults = {
+            unit = "percentunit";
+          };
+          overrides = [ ];
+        };
+        options = {
+          reduceOptions = {
+            calcs = [ "lastNotNull" ];
+            fields = "";
+            values = false;
+          };
+          orientation = "auto";
+          textMode = "auto";
+        };
+        targets = [
+          {
+            refId = "A";
+            expr = ''zfs_pool_fragmentation_ratio{pool=~"$pool"}'';
+            legendFormat = "{{pool}}";
+          }
+        ];
+      }
+      {
+        id = 4;
+        title = "Pool dedup ratio";
+        type = "stat";
+        datasource = "Prometheus";
+        gridPos = {
+          x = 18;
+          y = 0;
+          w = 6;
+          h = 4;
+        };
+        fieldConfig = {
+          defaults = {
+            unit = "none";
+          };
+          overrides = [ ];
+        };
+        options = {
+          reduceOptions = {
+            calcs = [ "lastNotNull" ];
+            fields = "";
+            values = false;
+          };
+          orientation = "auto";
+          textMode = "auto";
+        };
+        targets = [
+          {
+            refId = "A";
+            expr = ''zfs_pool_deduplication_ratio{pool=~"$pool"}'';
+            legendFormat = "{{pool}}";
+          }
+        ];
+      }
+      {
+        id = 5;
+        title = "Pool allocated vs free";
+        type = "timeseries";
+        datasource = "Prometheus";
+        gridPos = {
+          x = 0;
+          y = 4;
+          w = 24;
+          h = 7;
+        };
+        fieldConfig = {
+          defaults = {
+            unit = "bytes";
+            custom = {
+              stacking = {
+                mode = "normal";
+              };
+            };
+          };
+          overrides = [ ];
+        };
+        options = {
+          legend = {
+            displayMode = "list";
+            placement = "bottom";
+          };
+          tooltip.mode = "multi";
+        };
+        targets = [
+          {
+            refId = "A";
+            expr = ''zfs_pool_allocated_bytes{pool=~"$pool"}'';
+            legendFormat = "{{pool}} allocated";
+          }
+          {
+            refId = "B";
+            expr = ''zfs_pool_free_bytes{pool=~"$pool"}'';
+            legendFormat = "{{pool}} free";
+          }
+        ];
+      }
+      {
+        id = 6;
+        title = "Top datasets by used bytes";
+        type = "bargauge";
+        datasource = "Prometheus";
+        gridPos = {
+          x = 0;
+          y = 11;
+          w = 12;
+          h = 8;
+        };
+        fieldConfig = {
+          defaults = {
+            unit = "bytes";
+          };
+          overrides = [ ];
+        };
+        options = {
+          displayMode = "basic";
+          orientation = "horizontal";
+          reduceOptions = {
+            calcs = [ "lastNotNull" ];
+            fields = "";
+            values = false;
+          };
+        };
+        targets = [
+          {
+            refId = "A";
+            expr = ''topk(10, zfs_dataset_used_bytes{pool=~"$pool", type=~"$type"})'';
+            legendFormat = "{{name}}";
+          }
+        ];
+      }
+      {
+        id = 7;
+        title = "Dataset used vs available";
+        type = "timeseries";
+        datasource = "Prometheus";
+        gridPos = {
+          x = 12;
+          y = 11;
+          w = 12;
+          h = 8;
+        };
+        fieldConfig = {
+          defaults = {
+            unit = "bytes";
+          };
+          overrides = [ ];
+        };
+        options = {
+          legend = {
+            displayMode = "list";
+            placement = "bottom";
+          };
+          tooltip.mode = "multi";
+        };
+        targets = [
+          {
+            refId = "A";
+            expr = ''zfs_dataset_used_bytes{pool=~"$pool", type=~"$type", name=~"$dataset"}'';
+            legendFormat = "{{name}} used";
+          }
+          {
+            refId = "B";
+            expr = ''zfs_dataset_available_bytes{pool=~"$pool", type=~"$type", name=~"$dataset"}'';
+            legendFormat = "{{name}} available";
+          }
+        ];
+      }
+    ];
+  };
+
   dashboardDir = pkgs.linkFarm "grafana-dashboards" [
     {
       name = "node-exporter-full.json";
@@ -125,6 +485,10 @@ let
     {
       name = "system-logs.json";
       path = pkgs.writeText "system-logs.json" (builtins.toJSON logs);
+    }
+    {
+      name = "zfs.json";
+      path = pkgs.writeText "zfs.json" (builtins.toJSON zfs);
     }
   ];
 in
@@ -195,6 +559,12 @@ in
           {
             targets = [ "ito:9100" ];
           }
+        ];
+      }
+      {
+        job_name = "ito-zfs";
+        static_configs = [
+          { targets = [ "ito:9134" ]; }
         ];
       }
     ];
