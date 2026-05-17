@@ -71,6 +71,7 @@
   stats = {
     enable = true;
     lokiUrl = "http://ronri:3100/loki/api/v1/push";
+    zfsExporter.enable = true;
   };
 
   system.stateVersion = "25.11";

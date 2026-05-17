@@ -20,43 +20,58 @@ in
         (e.g. http://ronri:3100/loki/api/v1/push) when shipping remotely.
       '';
     };
+
+    zfsExporter = {
+      enable = lib.mkEnableOption "Prometheus ZFS exporter";
+    };
   };
 
-  config = lib.mkIf cfg.enable {
-    services.prometheus.exporters.node.enable = true;
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
+      services.prometheus.exporters.node.enable = true;
 
-    # let prometheus scrape via tailscale
-    networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
-      9100 # node exporter
-    ];
+      # let prometheus scrape via tailscale
+      networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
+        9100 # node exporter
+      ];
 
-    # ships the systemd journal into loki
-    services.alloy.enable = true;
-    environment.etc."alloy/config.alloy".text = ''
-      loki.relabel "journal" {
-        forward_to = []
+      # ships the systemd journal into loki
+      services.alloy.enable = true;
+      environment.etc."alloy/config.alloy".text = ''
+        loki.relabel "journal" {
+          forward_to = []
 
-        rule {
-          source_labels = ["__journal__systemd_unit"]
-          target_label  = "unit"
+          rule {
+            source_labels = ["__journal__systemd_unit"]
+            target_label  = "unit"
+          }
+          rule {
+            source_labels = ["__journal_priority_keyword"]
+            target_label  = "level"
+          }
         }
-        rule {
-          source_labels = ["__journal_priority_keyword"]
-          target_label  = "level"
-        }
-      }
 
-      loki.source.journal "journal" {
-        relabel_rules = loki.relabel.journal.rules
-        forward_to    = [loki.write.local.receiver]
-        labels        = { job = "systemd-journal", host = "${config.networking.hostName}" }
-      }
-
-      loki.write "local" {
-        endpoint {
-          url = "${cfg.lokiUrl}"
+        loki.source.journal "journal" {
+          relabel_rules = loki.relabel.journal.rules
+          forward_to    = [loki.write.local.receiver]
+          labels        = { job = "systemd-journal", host = "${config.networking.hostName}" }
         }
-      }
-    '';
-  };
+
+        loki.write "local" {
+          endpoint {
+            url = "${cfg.lokiUrl}"
+          }
+        }
+      '';
+    })
+
+    (lib.mkIf cfg.zfsExporter.enable {
+      services.prometheus.exporters.zfs.enable = true;
+
+      # let prometheus scrape via tailscale
+      networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
+        config.services.prometheus.exporters.zfs.port
+      ];
+    })
+  ];
 }
