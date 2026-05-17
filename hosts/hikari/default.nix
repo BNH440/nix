@@ -31,6 +31,7 @@ in
 
     # Graphical
     aseprite
+    cinny-desktop
 
     # Misc
     mosh

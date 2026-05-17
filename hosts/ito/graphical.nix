@@ -55,6 +55,7 @@
     prusa-slicer
     bitwarden-desktop
     graphite
+    cinny-desktop
 
     # Gaming
     lutris
