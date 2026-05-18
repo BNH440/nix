@@ -68,7 +68,7 @@ jobs:
             max-jobs = auto
             cores = 0
 
-      - name: Configure Niks3 (OIDC)
+      - name: Configure Niks3
         uses: Mic92/niks3-action@v1
         with:
           server-url: ${{ vars.NIKS3_SERVER }}
