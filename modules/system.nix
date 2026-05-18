@@ -30,6 +30,10 @@
     serverUrl = "https://nixcache.blakehaug.com";
     authTokenFile = config.age.secrets.niks3-auth-token.path;
   };
+  environment.sessionVariables = {
+    NIKS3_SERVER_URL = "https://nixcache.blakehaug.com";
+    NIKS3_AUTH_TOKEN_FILE = config.age.secrets.niks3-auth-token.path;
+  };
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
