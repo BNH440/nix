@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   ...
 }:
@@ -497,6 +498,11 @@ in
 
   stats.enable = true;
 
+  age.secrets.grafana-github-oauth.rekeyFile = ../../secrets/grafana-github-oauth.age;
+
+  systemd.services.grafana.serviceConfig.EnvironmentFile =
+    config.age.secrets.grafana-github-oauth.path;
+
   services.grafana = {
     enable = true;
     settings = {
@@ -509,6 +515,15 @@ in
         root_url = "https://${publicURL}/";
       };
       analytics.reporting_enabled = false;
+      auth.disable_login_form = true;
+      "auth.github" = {
+        enabled = true;
+        allow_sign_up = true;
+        scopes = "read:org,user:email";
+        role_attribute_path = "[login=='BNH440'][0] && 'GrafanaAdmin'";
+        role_attribute_strict = true;
+        allow_assign_grafana_admin = true;
+      };
     };
     provision = {
       enable = true;
