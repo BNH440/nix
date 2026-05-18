@@ -74,8 +74,8 @@ in
       exec ${pkgs.seaweedfs}/bin/weed server \
         -dir=/var/lib/seaweedfs \
         -s3 -filer \
-        -ip=127.0.0.1 \
-        -ip.bind=127.0.0.1 \
+        -ip=nixcache.blakehaug.com \
+        -ip.bind=:: \
         -s3.port=8333 \
         -volume.max=300 \
         -s3.config=/var/lib/seaweedfs/s3.json
@@ -89,7 +89,7 @@ in
     httpAddr = "127.0.0.1:5751";
 
     s3 = {
-      endpoint = "127.0.0.1:8333";
+      endpoint = "nixcache.blakehaug.com:8333";
       bucket = "nixcache";
       useSSL = false;
       accessKeyFile = config.age.secrets.niks3-s3-access-key.path;
