@@ -43,5 +43,5 @@
   # Open ports
   # networking.firewall.allowedTCPPorts = [ 25565 ];
   # networking.firewall.allowedUDPPorts = [ 25565 ];
-  networking.firewall.allowedTCPPorts = [ 8888 ];
+  # networking.firewall.allowedTCPPorts = [ 8888 ];
 }
