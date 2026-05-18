@@ -6,5 +6,6 @@
     ./services.nix
     ./system.nix
     ./secrets.nix
+    ./stats.nix
   ];
 }
