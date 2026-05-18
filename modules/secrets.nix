@@ -10,6 +10,7 @@ let
   hostkeys = {
     ronri = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ46UqcVxkdL8TeUiZBID7Tz3wjVhPw1SstvfH1hjyrR";
     ito = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILhtJOUxFnQicln/5h268GjBZbrRmFBv7xpa/nZ0JNwe";
+    kako = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILhtJOUxFnQicln/5h268GjBZbrRmFBv7xpa/nZ0JNwe";
   };
 in
 {
