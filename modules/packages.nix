@@ -24,7 +24,7 @@
     nixd
 
     # Cache
-    inputs.attic.packages.${pkgs.system}.attic-client
+    inputs.niks3.packages.${pkgs.system}.niks3
 
     inputs.neovim-flake.packages.${pkgs.system}.default
   ];

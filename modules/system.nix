@@ -17,32 +17,19 @@
   ];
 
   # Binary cache
-  nix.settings.substituters = [ "https://nixcache.blakehaug.com/main" ];
-  nix.settings.trusted-public-keys = [ "main:gMJfiUKchtX1jmnXVUA3t54OMNLfCsTrj2nytssdU7A=" ];
+  nix.settings.substituters = [ "https://nixcache.blakehaug.com" ];
+  nix.settings.trusted-public-keys = [
+    "nixcache.blakehaug.com-1:gCvj6d/XaSiX6YpelqVPX/kCZAfvAraN8BhtN22TG50="
+  ];
 
-  age.secrets.attic-auth-token.rekeyFile = ../secrets/attic-auth-token.age;
+  age.secrets.niks3-auth-token.rekeyFile = ../secrets/niks3-auth-token.age;
 
-  systemd.services.attic-watch-store =
-    let
-      attic-client = inputs.attic.packages.${pkgs.system}.attic-client;
-    in
-    {
-      description = "Attic watch-store";
-      after = [
-        "network-online.target"
-        "agenix.service"
-      ];
-      wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStartPre = "${pkgs.writeShellScript "attic-login" ''
-          ${attic-client}/bin/attic login --set-default nixcache https://nixcache.blakehaug.com "$(cat ${config.age.secrets.attic-auth-token.path})"
-        ''}";
-        ExecStart = "${attic-client}/bin/attic watch-store main";
-        Restart = "on-failure";
-        RestartSec = 5;
-      };
-    };
+  services.niks3-auto-upload = {
+    enable = true;
+    package = inputs.niks3.packages.${pkgs.system}.niks3-hook;
+    serverUrl = "https://nixcache.blakehaug.com";
+    authTokenFile = config.age.secrets.niks3-auth-token.path;
+  };
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";

@@ -8,6 +8,10 @@ on:
   schedule:
     - cron: "0 6 * * 1" # weekly rebuild to keep in cache
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   build:
     name: ${{ matrix.name }}
@@ -64,19 +68,13 @@ jobs:
             max-jobs = auto
             cores = 0
 
-      - name: Install and configure Attic
-        env:
-          ATTIC_TOKEN: ${{ secrets.ATTIC_TOKEN }}
-          ATTIC_ENDPOINT: ${{ vars.ATTIC_ENDPOINT }}
-          ATTIC_CACHE: ${{ vars.ATTIC_CACHE }}
-        run: |
-          nix profile install nixpkgs#attic-client
-          attic login ci "$ATTIC_ENDPOINT" "$ATTIC_TOKEN"
-          attic use "ci:$ATTIC_CACHE"
+      - name: Configure Niks3 (OIDC)
+        uses: Mic92/niks3-action@v1
+        with:
+          server-url: ${{ vars.NIKS3_SERVER }}
 
       - name: Build and push ${{ matrix.name }}
         env:
-          ATTIC_CACHE: ${{ vars.ATTIC_CACHE }}
           EVENT: ${{ github.event_name }}
         run: |
           extra_args=()
@@ -86,5 +84,4 @@ jobs:
           nix run nixpkgs#nix-fast-build -- \
             "${extra_args[@]}" \
             --no-nom \
-            --flake ".#${{ matrix.target }}" \
-            --attic-cache "ci:$ATTIC_CACHE"
+            --flake ".#${{ matrix.target }}"

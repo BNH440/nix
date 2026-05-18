@@ -37,7 +37,7 @@ in
     mosh
 
     # Cache
-    inputs.attic.packages.${pkgs.system}.attic-client
+    inputs.niks3.packages.${pkgs.system}.niks3
 
     # enable openssh
     openssh
@@ -80,8 +80,10 @@ in
   nix.settings.experimental-features = "nix-command flakes";
 
   # Binary cache
-  nix.settings.substituters = [ "https://nixcache.blakehaug.com/main" ];
-  nix.settings.trusted-public-keys = [ "main:gMJfiUKchtX1jmnXVUA3t54OMNLfCsTrj2nytssdU7A=" ];
+  nix.settings.substituters = [ "https://nixcache.blakehaug.com" ];
+  nix.settings.trusted-public-keys = [
+    "nixcache.blakehaug.com-1:gCvj6d/XaSiX6YpelqVPX/kCZAfvAraN8BhtN22TG50="
+  ];
 
   # Set Git commit hash for darwin-version.
   system.configurationRevision = self.rev or self.dirtyRev or null;
