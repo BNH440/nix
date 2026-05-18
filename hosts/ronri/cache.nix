@@ -9,7 +9,6 @@ let
   publicURL = "nixcache.blakehaug.com";
   githubRepo = "BNH440/nix";
   niks3Pkgs = inputs.niks3.packages.${pkgs.system};
-  seaweedfsHost = "${config.networking.hostName}.${config.networking.domain}";
 in
 {
   imports = [ ];
@@ -75,8 +74,8 @@ in
       exec ${pkgs.seaweedfs}/bin/weed server \
         -dir=/var/lib/seaweedfs \
         -s3 -filer \
-        -ip=${seaweedfsHost} \
-        -ip.bind=:: \
+        -ip=127.0.0.1 \
+        -ip.bind=127.0.0.1 \
         -s3.port=8333 \
         -volume.max=300 \
         -s3.config=/var/lib/seaweedfs/s3.json
@@ -90,7 +89,7 @@ in
     httpAddr = "127.0.0.1:5751";
 
     s3 = {
-      endpoint = "${seaweedfsHost}:8333";
+      endpoint = "127.0.0.1:8333";
       bucket = "nixcache";
       useSSL = false;
       accessKeyFile = config.age.secrets.niks3-s3-access-key.path;
