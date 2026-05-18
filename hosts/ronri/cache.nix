@@ -136,6 +136,4 @@ in
   };
 
   security.acme.certs."blakehaug.com".extraDomainNames = [ publicURL ];
-
-  networking.firewall.allowedTCPPorts = [ 8333 ];
 }
