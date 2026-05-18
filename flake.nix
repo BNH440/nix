@@ -64,7 +64,10 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    attic.url = "github:zhaofengli/attic";
+    niks3 = {
+      url = "github:Mic92/niks3";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     tsexit = {
       url = "github:bnh440/tsexit";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -92,7 +95,7 @@
       nix-flatpak,
       aagl,
       zen-browser,
-      attic,
+      niks3,
       tsexit,
       ...
     }@inputs:
@@ -116,7 +119,8 @@
             ./hosts/ronri/default.nix
             agenix.nixosModules.default
             agenix-rekey.nixosModules.default
-            attic.nixosModules.atticd
+            niks3.nixosModules.niks3
+            niks3.nixosModules.niks3-auto-upload
             nix-index-database.nixosModules.default
             home-manager.nixosModules.home-manager
             {
@@ -134,6 +138,7 @@
             ./hosts/ito/default.nix
             agenix.nixosModules.default
             agenix-rekey.nixosModules.default
+            niks3.nixosModules.niks3-auto-upload
             nix-index-database-unstable.nixosModules.default
             disko.nixosModules.disko
             lanzaboote.nixosModules.lanzaboote
