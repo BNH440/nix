@@ -18,6 +18,7 @@
     fastfetch
     git
     dig
+    grep
 
     # Dev
     nil
