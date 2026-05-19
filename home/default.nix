@@ -67,6 +67,7 @@
   };
 
   programs.zsh.enable = true;
+  programs.zsh.defaultKeymap = "emacs";
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
