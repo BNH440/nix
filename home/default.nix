@@ -101,7 +101,6 @@
       };
       "kako" = {
         hostname = "kako";
-        user = "ubuntu";
         forwardAgent = true;
       };
       "ronri" = {

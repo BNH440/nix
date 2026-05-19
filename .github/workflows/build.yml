@@ -29,7 +29,7 @@ jobs:
             target: nixosConfigurations.ito.config.system.build.toplevel
             os: ubuntu-latest
           - name: kako
-            target: homeConfigurations.blakeh.activationPackage
+            target: nixosConfigurations.kako.config.system.build.toplevel
             os: ubuntu-24.04-arm
           - name: devshell-x86_64-linux
             target: devShells.x86_64-linux.default

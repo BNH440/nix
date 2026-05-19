@@ -49,7 +49,7 @@
     };
     disko = {
       url = "github:nix-community/disko/latest";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v1.0.0";
@@ -105,7 +105,7 @@
         "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIPs3+fHihwZSBQVtoXffCtSSmBBDb/0NY+BPDIo+FKh9AAAABHNzaDo=" # backup yubikey
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ3SnQlFllOIBsQmgGB8owAyKviKNoRvleS/eIbK4/8B" # hikari
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPVa9eWADJr7DQf0c7xiJGl2+6KYF9LeGJUfSJj2mT/S" # ito
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAeZsmzMQHKkaAk/PFx1yJG6mijENIy9nFeHySQKJ3R6" # kako
+        # "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAeZsmzMQHKkaAk/PFx1yJG6mijENIy9nFeHySQKJ3R6" # kako
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMVCtRg036ANP+l/vmvzj6EJZL2Ic8s5y5tqyMoaOzrs" # ronri
         "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBF16Vm3gwviIP1dg/EAx1xxofFm8No8zN6UGYpEM4D72KusDFYwa2M4F+bvf+a0K01OJNNGUnsxFTyizQxwsPj4=" # phone
       ];
@@ -123,6 +123,26 @@
             niks3.nixosModules.niks3-auto-upload
             nix-index-database.nixosModules.default
             home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.blakeh = ./home/default.nix;
+              home-manager.backupFileExtension = "hm-backup";
+              home-manager.extraSpecialArgs = { inherit inputs; };
+            }
+          ];
+        };
+        kako = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs pubkeys; };
+          modules = [
+            ./hosts/kako/default.nix
+            agenix.nixosModules.default
+            agenix-rekey.nixosModules.default
+            niks3.nixosModules.niks3
+            niks3.nixosModules.niks3-auto-upload
+            nix-index-database.nixosModules.default
+            home-manager.nixosModules.home-manager
+            disko.nixosModules.disko
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
@@ -173,13 +193,6 @@
         ];
       };
 
-      # home manager config for kako
-      homeConfigurations.blakeh = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.aarch64-linux;
-        modules = [ ./hosts/kako/home.nix ];
-        extraSpecialArgs = { inherit inputs; };
-      };
-
       colmenaHive = colmena.lib.makeHive {
         meta = {
           nixpkgs = import nixpkgs { system = "x86_64-linux"; };
@@ -193,6 +206,15 @@
           imports = self.nixosConfigurations.ronri._module.args.modules;
           deployment = {
             targetHost = "ronri";
+            targetUser = "blakeh";
+            buildOnTarget = true;
+          };
+        };
+
+        kako = {
+          imports = self.nixosConfigurations.kako._module.args.modules;
+          deployment = {
+            targetHost = "kako";
             targetUser = "blakeh";
             buildOnTarget = true;
           };
