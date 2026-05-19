@@ -582,6 +582,15 @@ in
           { targets = [ "ito:9134" ]; }
         ];
       }
+      {
+        job_name = "kako-node";
+        scrape_interval = "15s";
+        static_configs = [
+          {
+            targets = [ "kako:9100" ];
+          }
+        ];
+      }
     ];
   };
 
