@@ -52,6 +52,12 @@
     openssh.authorizedKeys.keys = pubkeys;
   };
 
+  age.secrets.root-password-hash.rekeyFile = ../secrets/root-password-hash.age;
+
+  users.users.root = {
+    hashedPasswordFile = config.age.secrets.root-password-hash.path;
+  };
+
   # fix colmena apply needing interactive sudo password entry
   security.sudo.extraRules = [
     {
