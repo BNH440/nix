@@ -44,6 +44,7 @@
 
   age.secrets.blakeh-password-hash.rekeyFile = ../secrets/blakeh-password-hash.age;
 
+  users.mutableUsers = false;
   users.users.blakeh = {
     isNormalUser = true;
     extraGroups = [
