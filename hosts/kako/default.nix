@@ -28,8 +28,7 @@
   ];
 
   # Get network configuration from DHCP
-  networking.useDHCP = false;
-  networking.interfaces.ens3.useDHCP = true;
+  networking.useDHCP = true;
 
   swapDevices = [
     {
