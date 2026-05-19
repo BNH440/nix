@@ -211,6 +211,15 @@
           };
         };
 
+        kako = {
+          imports = self.nixosConfigurations.kako._module.args.modules;
+          deployment = {
+            targetHost = "kako";
+            targetUser = "blakeh";
+            buildOnTarget = true;
+          };
+        };
+
         ito = {
           imports = self.nixosConfigurations.ito._module.args.modules;
           deployment = {
