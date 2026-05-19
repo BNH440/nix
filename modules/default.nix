@@ -7,5 +7,6 @@
     ./system.nix
     ./secrets.nix
     ./stats.nix
+    ./blakehaug-web.nix
   ];
 }
