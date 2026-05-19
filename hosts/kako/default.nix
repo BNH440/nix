@@ -28,7 +28,7 @@
   ];
 
   # Get network configuration from DHCP
-  networking.useDHCP = true;
+  networking.useDHCP = lib.mkDefault true;
 
   swapDevices = [
     {
