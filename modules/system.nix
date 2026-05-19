@@ -42,6 +42,8 @@
   environment.shells = with pkgs; [ zsh ];
   programs.zsh.enable = true;
 
+  age.secrets.blakeh-password-hash.rekeyFile = ../secrets/blakeh-password-hash.age;
+
   users.users.blakeh = {
     isNormalUser = true;
     extraGroups = [
@@ -50,12 +52,7 @@
     ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = pubkeys;
-  };
-
-  age.secrets.root-password-hash.rekeyFile = ../secrets/root-password-hash.age;
-
-  users.users.root = {
-    hashedPasswordFile = config.age.secrets.root-password-hash.path;
+    hashedPasswordFile = config.age.secrets.blakeh-password-hash.path;
   };
 
   # fix colmena apply needing interactive sudo password entry
