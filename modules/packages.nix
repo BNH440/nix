@@ -27,6 +27,8 @@
     inputs.niks3.packages.${pkgs.system}.niks3
 
     inputs.neovim-flake.packages.${pkgs.system}.default
+
+    nixos-firewall-tool
   ];
 
   nixpkgs.config.allowUnfree = true;
