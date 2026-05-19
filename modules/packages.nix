@@ -47,6 +47,7 @@
   };
 
   programs.tmux.enable = true;
+  programs.screen.enable = true;
 
   environment.shellAliases = {
     switch = "cd ~/.nixos && git pull && nh os switch && cd -";
