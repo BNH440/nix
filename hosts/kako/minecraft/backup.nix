@@ -59,7 +59,7 @@ in
       exclude = backupExclude;
       repository = "rclone:onedrive:vm-minecraft-backup";
       passwordFile = config.age.secrets.minecraft-restic-backup-password.path;
-      initialize = true;
+      initialize = false;
 
       timerConfig = {
         OnCalendar = "*-*-* 04:00:00";
@@ -78,7 +78,7 @@ in
     #   exclude = backupExclude;
     #   repository = "sftp:blakeh@ito:/data/backups/minecraft-vm-backup";
     #   passwordFile = config.age.secrets.minecraft-restic-backup-password.path;
-    #   initialize = true;
+    #   initialize = false;
 
     #   timerConfig = {
     #     OnCalendar = "*-*-* 04:15:00";
