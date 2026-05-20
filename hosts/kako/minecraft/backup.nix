@@ -73,23 +73,23 @@ in
       inherit backupPrepareCommand backupCleanupCommand;
     };
 
-    minecraft-pc = {
-      paths = backupPaths;
-      exclude = backupExclude;
-      repository = "sftp:blakeh@ito:/data/backups/minecraft-vm-backup";
-      passwordFile = config.age.secrets.minecraft-restic-backup-password.path;
-      initialize = true;
+    # minecraft-pc = {
+    #   paths = backupPaths;
+    #   exclude = backupExclude;
+    #   repository = "sftp:blakeh@ito:/data/backups/minecraft-vm-backup";
+    #   passwordFile = config.age.secrets.minecraft-restic-backup-password.path;
+    #   initialize = true;
 
-      timerConfig = {
-        OnCalendar = "*-*-* 04:15:00";
-        Persistent = true;
-        RandomizedDelaySec = "5min";
-      };
+    #   timerConfig = {
+    #     OnCalendar = "*-*-* 04:15:00";
+    #     Persistent = true;
+    #     RandomizedDelaySec = "5min";
+    #   };
 
-      inherit pruneOpts;
-      runCheck = true;
+    #   inherit pruneOpts;
+    #   runCheck = true;
 
-      inherit backupPrepareCommand backupCleanupCommand;
-    };
+    #   inherit backupPrepareCommand backupCleanupCommand;
+    # };
   };
 }
