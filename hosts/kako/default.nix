@@ -10,6 +10,7 @@
     ./hardware.nix
     ./disks.nix
     ./networking.nix
+    ./minecraft/default.nix
     ../../modules/default.nix
   ];
 
