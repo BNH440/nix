@@ -60,6 +60,7 @@ in
       repository = "rclone:onedrive:vm-minecraft-backup";
       passwordFile = config.age.secrets.minecraft-restic-backup-password.path;
       initialize = false;
+      user = "blakeh";
 
       timerConfig = {
         OnCalendar = "*-*-* 04:00:00";
