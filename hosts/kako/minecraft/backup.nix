@@ -51,7 +51,12 @@ in
     rclone
   ];
 
-  age.secrets.minecraft-restic-backup-password.rekeyFile = ../../../secrets/minecraft-restic-backup-password.age;
+  age.secrets.minecraft-restic-backup-password = {
+    owner = "blakeh";
+    group = "users";
+    mode = "600";
+    rekeyFile = ../../../secrets/minecraft-restic-backup-password.age;
+  };
 
   services.restic.backups = {
     minecraft-onedrive = {
