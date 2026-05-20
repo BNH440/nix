@@ -97,7 +97,7 @@ in
     (lib.mkIf (cfg.enable && cfg.serveRoot) {
       services.nginx.virtualHosts = {
         "blakehaug.com" = {
-          useACMEHost = "blakehaug.com";
+          enableACME = true;
           forceSSL = true;
           root = "/var/www/blakehaug.com";
         };
