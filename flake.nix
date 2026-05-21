@@ -72,6 +72,10 @@
       url = "github:bnh440/tsexit";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    copyparty = {
+      url = "github:9001/copyparty";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -97,6 +101,7 @@
       zen-browser,
       niks3,
       tsexit,
+      copyparty,
       ...
     }@inputs:
     let
@@ -143,6 +148,7 @@
             nix-index-database.nixosModules.default
             home-manager.nixosModules.home-manager
             disko.nixosModules.disko
+            copyparty.nixosModules.default
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;

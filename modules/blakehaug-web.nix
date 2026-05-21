@@ -91,6 +91,7 @@ in
           dnsProvider = "cloudflare";
           environmentFile = config.age.secrets.cloudflare-api-key.path;
         };
+        certs."blakehaug.com".group = "nginx";
       };
     })
 

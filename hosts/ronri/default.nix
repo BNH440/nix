@@ -9,10 +9,8 @@
   imports = [
     ./hardware.nix
     ./networking.nix
+    ./services/default.nix
     ../../modules/default.nix
-    ./cache.nix
-    ./grafana.nix
-    ./web.nix
   ];
 
   # Enable QEMU guest agent for Proxmox

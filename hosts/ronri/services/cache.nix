@@ -18,19 +18,19 @@ in
   age.secrets.niks3-auth-token.mode = "0400";
 
   age.secrets.niks3-signing-key = {
-    rekeyFile = ../../secrets/niks3-signing-key.age;
+    rekeyFile = ../../../secrets/niks3-signing-key.age;
     owner = "niks3";
     group = "niks3";
     mode = "0400";
   };
   age.secrets.niks3-s3-access-key = {
-    rekeyFile = ../../secrets/niks3-s3-access-key.age;
+    rekeyFile = ../../../secrets/niks3-s3-access-key.age;
     owner = "niks3";
     group = "niks3";
     mode = "0400";
   };
   age.secrets.niks3-s3-secret-key = {
-    rekeyFile = ../../secrets/niks3-s3-secret-key.age;
+    rekeyFile = ../../../secrets/niks3-s3-secret-key.age;
     owner = "niks3";
     group = "niks3";
     mode = "0400";
