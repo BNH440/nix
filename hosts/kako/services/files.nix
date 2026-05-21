@@ -77,7 +77,7 @@ in
     "d /srv/copyparty            0755 copyparty copyparty - -"
     "d /srv/copyparty/drop       0755 copyparty copyparty - -"
     "d /srv/copyparty/share      0755 copyparty copyparty - -"
-    "d /srv/copyparty/private    0700 copyparty copyparty - -"
+    "d /srv/copyparty/private    0755 copyparty copyparty - -"
   ];
 
   # NGINX config
@@ -102,7 +102,6 @@ in
         recommendedProxySettings = true;
         proxyWebsockets = true;
         extraConfig = ''
-          proxy_http_version 1.1;
           proxy_request_buffering off;
           proxy_buffering off;
 
