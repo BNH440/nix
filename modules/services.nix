@@ -19,6 +19,10 @@
     settings.PermitRootLogin = "no";
   };
 
+  # restrict ssh to tailscale only
+  services.openssh.openFirewall = lib.mkForce false;
+  networking.firewall.interfaces."tailscale0".allowedTCPPorts = [ 22 ];
+
   # Tailscale config
   services.tailscale = {
     enable = true;
