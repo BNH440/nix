@@ -6,8 +6,6 @@ let
   publicURL = "soulcraft.blakehaug.com";
 in
 {
-  blakehaug-web.enable = true;
-
   services.nginx.virtualHosts."${publicURL}" = {
     enableACME = true;
     forceSSL = true;
