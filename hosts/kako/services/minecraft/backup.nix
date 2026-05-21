@@ -55,7 +55,7 @@ in
     owner = "blakeh";
     group = "users";
     mode = "600";
-    rekeyFile = ../../../secrets/minecraft-restic-backup-password.age;
+    rekeyFile = ../../../../secrets/minecraft-restic-backup-password.age;
   };
 
   services.restic.backups = {

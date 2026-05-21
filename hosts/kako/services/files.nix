@@ -9,6 +9,7 @@ in
 {
   age.secrets.blakeh-copyparty-password = {
     owner = "copyparty";
+    group = "copyparty";
     mode = "600";
     rekeyFile = ../../../secrets/blakeh-copyparty-password.age;
   };

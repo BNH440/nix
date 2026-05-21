@@ -498,7 +498,7 @@ in
 
   stats.enable = true;
 
-  age.secrets.grafana-github-oauth.rekeyFile = ../../secrets/grafana-github-oauth.age;
+  age.secrets.grafana-github-oauth.rekeyFile = ../../../secrets/grafana-github-oauth.age;
 
   systemd.services.grafana.serviceConfig.EnvironmentFile =
     config.age.secrets.grafana-github-oauth.path;
