@@ -86,52 +86,52 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    settings = {
+    matchBlocks = {
       "*" = {
-        AddKeysToAgent = "yes";
-        IdentityFile = "~/.ssh/id_ed25519";
+        addKeysToAgent = "yes";
+        identityFile = "~/.ssh/id_ed25519";
       };
 
       "hikari" = {
-        HostName = "hikari";
-        ForwardAgent = true;
+        hostname = "hikari";
+        forwardAgent = true;
       };
       "ito" = {
-        HostName = "ito";
-        ForwardAgent = true;
+        hostname = "ito";
+        forwardAgent = true;
       };
       "kako" = {
-        HostName = "kako";
-        ForwardAgent = true;
+        hostname = "kako";
+        forwardAgent = true;
       };
       "ronri" = {
-        HostName = "ronri";
-        ForwardAgent = true;
+        hostname = "ronri";
+        forwardAgent = true;
       };
 
       # CSUA
       "soda" = {
-        HostName = "soda";
-        ForwardAgent = true;
+        hostname = "soda";
+        forwardAgent = true;
       };
       "tap" = {
-        HostName = "tap";
-        ForwardAgent = true;
+        hostname = "tap";
+        forwardAgent = true;
       };
       "latte" = {
-        HostName = "latte";
-        ProxyJump = "soda";
-        ForwardAgent = true;
+        hostname = "latte";
+        proxyJump = "soda";
+        forwardAgent = true;
       };
 
       # OCF
       "supernova" = {
-        HostName = "supernova";
-        ForwardAgent = true;
+        hostname = "supernova";
+        forwardAgent = true;
       };
       "koi" = {
-        HostName = "koi";
-        ForwardAgent = true;
+        hostname = "koi";
+        forwardAgent = true;
       };
     };
     extraConfig = ''
