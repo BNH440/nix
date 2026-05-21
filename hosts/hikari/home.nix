@@ -1,4 +1,7 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  ...
+}:
 
 let
   openssh-sk-standalone = import ./pkgs/openssh-sk-standalone.nix { inherit pkgs; };
