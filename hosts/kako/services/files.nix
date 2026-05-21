@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   ...
 }:
 
@@ -80,20 +81,40 @@ in
   ];
 
   # NGINX config
-  services.nginx.virtualHosts."${publicURL}" = {
-    enableACME = true;
-    forceSSL = true;
-    locations."/" = {
-      proxyPass = "http://127.0.0.1:3923";
-      recommendedProxySettings = true;
-      proxyWebsockets = true;
+  services.nginx = {
+    clientMaxBodySize = lib.mkForce "0";
+    appendHttpConfig = ''
+      client_header_timeout 610m;
+      client_body_timeout   610m;
+      send_timeout          610m;
+    '';
+    upstreams.copyparty = {
+      servers."127.0.0.1:3923" = { };
       extraConfig = ''
-        proxy_request_buffering off;
-        proxy_buffering off;
-        proxy_read_timeout 3600s;
-        proxy_send_timeout 3600s;
-        client_max_body_size 0;
+        keepalive 1;
       '';
+    };
+    virtualHosts."${publicURL}" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:3923";
+        recommendedProxySettings = true;
+        proxyWebsockets = true;
+        extraConfig = ''
+          proxy_http_version 1.1;
+          proxy_request_buffering off;
+          proxy_buffering off;
+
+          # Download speed tuning (600 → 1500 MiB/s per the upstream example)
+          proxy_buffers 32 8k;
+          proxy_buffer_size 16k;
+          proxy_busy_buffers_size 24k;
+
+          proxy_read_timeout 3600s;
+          proxy_send_timeout 3600s;
+        '';
+      };
     };
   };
 }
