@@ -6,7 +6,8 @@
 }:
 
 let
-  publicURL = "nixcache.blakehaug.com";
+  cacheURL = "nixcache.blakehaug.com";
+  niks3URL = "niks3.blakehaug.com";
   githubRepo = "BNH440/nix";
   niks3Pkgs = inputs.niks3.packages.${pkgs.system};
 in
@@ -98,21 +99,25 @@ in
 
     apiTokenFile = config.age.secrets.niks3-auth-token.path;
     signKeyFiles = [ config.age.secrets.niks3-signing-key.path ];
-    cacheUrl = "https://${publicURL}";
+
+    # public substituter url
+    cacheUrl = "https://${cacheURL}";
 
     oidc.providers.github = {
       issuer = "https://token.actions.githubusercontent.com";
-      audience = "https://${publicURL}";
+      audience = "https://${niks3URL}";
       boundClaims = {
         repository = [ githubRepo ];
       };
     };
 
-    readProxy.enable = true;
+    # reading straight from seaweedfs for best performance
+    readProxy.enable = false;
 
+    # niks3 control server (uploads, auth, gc)
     nginx = {
       enable = true;
-      domain = publicURL;
+      domain = niks3URL;
       enableACME = false;
       forceSSL = true;
     };
@@ -131,11 +136,27 @@ in
     requires = [ "seaweedfs.service" ];
   };
 
-  services.nginx.virtualHosts.${publicURL} = {
+  # niks3 control server vhost
+  services.nginx.virtualHosts.${niks3URL} = {
     useACMEHost = "blakehaug.com";
   };
 
-  security.acme.certs."blakehaug.com".extraDomainNames = [ publicURL ];
+  # reverse proxy to the seaweedfs s3 bucket
+  services.nginx.virtualHosts.${cacheURL} = {
+    useACMEHost = "blakehaug.com";
+    forceSSL = true;
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:8333/nixcache/";
+      extraConfig = ''
+        proxy_buffering off;
+      '';
+    };
+  };
+
+  security.acme.certs."blakehaug.com".extraDomainNames = [
+    cacheURL
+    niks3URL
+  ];
 
   networking.firewall.allowedTCPPorts = [ 8333 ];
 }
