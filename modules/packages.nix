@@ -51,5 +51,8 @@
     switch = "cd ~/.nixos && git pull && nh os switch && cd -";
   };
 
-  environment.variables.VISUAL = "nvim";
+  environment.variables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
 }
