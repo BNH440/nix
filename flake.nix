@@ -76,6 +76,10 @@
       url = "github:9001/copyparty";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    firefox-addons = {
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -197,6 +201,30 @@
             home-manager.extraSpecialArgs = { inherit inputs; };
           }
         ];
+      };
+
+      # standalone home-manager config for OCF desktops and servers
+      homeConfigurations."ocf-server" = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          system = "x86_64-linux";
+          config.allowUnfree = true;
+        };
+        modules = [
+          ./home/default.nix
+          ./hosts/ocf/server.nix
+        ];
+        extraSpecialArgs = { inherit inputs; };
+      };
+      homeConfigurations."ocf-desktop" = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          system = "x86_64-linux";
+          config.allowUnfree = true;
+        };
+        modules = [
+          ./home/default.nix
+          ./hosts/ocf/desktop.nix
+        ];
+        extraSpecialArgs = { inherit inputs; };
       };
 
       colmenaHive = colmena.lib.makeHive {
