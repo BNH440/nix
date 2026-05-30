@@ -22,9 +22,9 @@
     nixd
 
     # Cache
-    inputs.niks3.packages.${pkgs.system}.niks3
+    inputs.niks3.packages.${pkgs.stdenv.hostPlatform.system}.niks3
 
-    inputs.neovim-flake.packages.${pkgs.system}.default
+    inputs.neovim-flake.packages.${pkgs.stdenv.hostPlatform.system}.default
 
     nixos-firewall-tool
   ];

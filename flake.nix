@@ -281,23 +281,28 @@
       });
     }
 
-    // flake-utils.lib.eachDefaultSystem (system: rec {
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [ agenix-rekey.overlays.default ];
-      };
-      devShells.default =
-        let
-          inherit (self.checks.${system}.pre-commit-check) shellHook enabledPackages;
-        in
-        pkgs.mkShell {
-          inherit shellHook;
-          buildInputs = enabledPackages;
-          packages = [
-            pkgs.agenix-rekey
-            pkgs.age-plugin-fido2-hmac
-            colmena.packages.${system}.colmena
-          ];
+    // flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ agenix-rekey.overlays.default ];
         };
-    });
+      in
+      {
+        devShells.default =
+          let
+            inherit (self.checks.${system}.pre-commit-check) shellHook enabledPackages;
+          in
+          pkgs.mkShell {
+            inherit shellHook;
+            buildInputs = enabledPackages;
+            packages = [
+              pkgs.agenix-rekey
+              pkgs.age-plugin-fido2-hmac
+              colmena.packages.${system}.colmena
+            ];
+          };
+      }
+    );
 }

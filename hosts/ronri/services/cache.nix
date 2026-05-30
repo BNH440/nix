@@ -8,7 +8,7 @@
 let
   publicURL = "nixcache.blakehaug.com";
   githubRepo = "BNH440/nix";
-  niks3Pkgs = inputs.niks3.packages.${pkgs.system};
+  niks3Pkgs = inputs.niks3.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
   imports = [ ];
