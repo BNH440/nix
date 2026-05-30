@@ -16,10 +16,7 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    neovim-flake = {
-      url = "github:ArMonarch/Neovim-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    neovim-flake.url = "github:ArMonarch/Neovim-flake";
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
