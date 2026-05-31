@@ -35,7 +35,7 @@ in
     mosh
 
     # Cache
-    inputs.niks3.packages.${pkgs.system}.niks3
+    inputs.niks3.packages.${pkgs.stdenv.hostPlatform.system}.niks3
 
     # enable openssh
     openssh

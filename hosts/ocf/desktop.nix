@@ -101,7 +101,7 @@ in
               "https://printhost.ocf.berkeley.edu/jobs/|http://logjam/|http://papercut/|http://pagefault/|http://fishpaper";
           };
 
-          extensions.packages = with inputs.firefox-addons.packages.${pkgs.system}; [
+          extensions.packages = with inputs.firefox-addons.packages.${pkgs.stdenv.hostPlatform.system}; [
             ublock-origin
             bitwarden
             darkreader

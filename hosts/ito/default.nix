@@ -50,6 +50,11 @@
   # allow unfree packages for nvidia
   nixpkgs.config.allowUnfree = true;
 
+  # TODO remove once all apps have updated electron
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-39.8.10"
+  ];
+
   # fix crashes?
   boot.kernelParams = [
     "processor.max_cstate=1"

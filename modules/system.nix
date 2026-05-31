@@ -25,7 +25,7 @@
 
   services.niks3-auto-upload = {
     enable = true;
-    package = inputs.niks3.packages.${pkgs.system}.niks3-hook;
+    package = inputs.niks3.packages.${pkgs.stdenv.hostPlatform.system}.niks3-hook;
     serverUrl = "https://nixcache.blakehaug.com";
     authTokenFile = config.age.secrets.niks3-auth-token.path;
   };

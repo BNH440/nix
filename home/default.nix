@@ -37,7 +37,7 @@
     yubikey-manager
     yt-dlp
     claude-code
-    inputs.tsexit.packages.${pkgs.system}.default
+    inputs.tsexit.packages.${pkgs.stdenv.hostPlatform.system}.default
     teleport
     ncdu
   ];
@@ -86,7 +86,7 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "*" = {
         addKeysToAgent = "yes";
         identityFile = "~/.ssh/id_ed25519";

@@ -3,8 +3,7 @@
 
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -14,28 +13,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    home-manager-unstable = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-    neovim-flake = {
-      url = "github:ArMonarch/Neovim-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    neovim-flake.url = "github:ArMonarch/Neovim-flake";
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-index-database-unstable = {
-      url = "github:nix-community/nix-index-database";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
     nix-darwin = {
-      url = "github:nix-darwin/nix-darwin/master";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     colmena = {
       url = "github:zhaofengli/colmena";
@@ -53,16 +41,16 @@
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v1.0.0";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak";
     aagl = {
       url = "github:ezKEa/aagl-gtk-on-nix";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     niks3 = {
       url = "github:Mic92/niks3";
@@ -70,7 +58,7 @@
     };
     tsexit = {
       url = "github:bnh440/tsexit";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     copyparty = {
       url = "github:9001/copyparty";
@@ -87,14 +75,11 @@
       self,
       systems,
       nixpkgs,
-      nixpkgs-unstable,
       agenix,
       agenix-rekey,
       home-manager,
-      home-manager-unstable,
       neovim-flake,
       nix-index-database,
-      nix-index-database-unstable,
       nix-darwin,
       flake-utils,
       colmena,
@@ -162,18 +147,18 @@
             }
           ];
         };
-        ito = nixpkgs-unstable.lib.nixosSystem {
+        ito = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs pubkeys; };
           modules = [
             ./hosts/ito/default.nix
             agenix.nixosModules.default
             agenix-rekey.nixosModules.default
             niks3.nixosModules.niks3-auto-upload
-            nix-index-database-unstable.nixosModules.default
+            nix-index-database.nixosModules.default
             disko.nixosModules.disko
             lanzaboote.nixosModules.lanzaboote
             nix-flatpak.nixosModules.nix-flatpak
-            home-manager-unstable.nixosModules.home-manager
+            home-manager.nixosModules.home-manager
             aagl.nixosModules.default
             {
               home-manager.useGlobalPkgs = true;
@@ -192,7 +177,7 @@
           # agenix.darwinModules.default
           # agenix-rekey.darwinModules.default
           nix-index-database.darwinModules.default
-          home-manager-unstable.darwinModules.home-manager
+          home-manager.darwinModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
@@ -293,23 +278,28 @@
       });
     }
 
-    // flake-utils.lib.eachDefaultSystem (system: rec {
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [ agenix-rekey.overlays.default ];
-      };
-      devShells.default =
-        let
-          inherit (self.checks.${system}.pre-commit-check) shellHook enabledPackages;
-        in
-        pkgs.mkShell {
-          inherit shellHook;
-          buildInputs = enabledPackages;
-          packages = [
-            pkgs.agenix-rekey
-            pkgs.age-plugin-fido2-hmac
-            colmena.packages.${system}.colmena
-          ];
+    // flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ agenix-rekey.overlays.default ];
         };
-    });
+      in
+      {
+        devShells.default =
+          let
+            inherit (self.checks.${system}.pre-commit-check) shellHook enabledPackages;
+          in
+          pkgs.mkShell {
+            inherit shellHook;
+            buildInputs = enabledPackages;
+            packages = [
+              pkgs.agenix-rekey
+              pkgs.age-plugin-fido2-hmac
+              colmena.packages.${system}.colmena
+            ];
+          };
+      }
+    );
 }

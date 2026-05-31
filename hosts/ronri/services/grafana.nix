@@ -524,6 +524,7 @@ in
         role_attribute_strict = true;
         allow_assign_grafana_admin = true;
       };
+      security.secret_key = "SW2YcwTIb9zpOOhoPsMm"; # prev default before 26.05
     };
     provision = {
       enable = true;
