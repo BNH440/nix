@@ -61,6 +61,12 @@ in
 
   system.primaryUser = "blakeh";
 
+  # allow touch-id sudo
+  security.pam.services.sudo_local = {
+    enable = true;
+    touchIdAuth = true;
+  };
+
   # setup ssh agent
   launchd.user.agents.ssh-agent = {
     command = "${pkgs.openssh}/bin/ssh-agent -D -a /tmp/ssh-agent.socket -P ${openssh-sk-standalone}/lib/sk-libfido2.dylib";
