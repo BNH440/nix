@@ -30,6 +30,7 @@ in
     # Graphical
     aseprite
     cinny-desktop
+    imagemagick
 
     # Misc
     mosh

@@ -54,6 +54,7 @@
     bitwarden-desktop
     graphite
     cinny-desktop
+    imagemagick
 
     # Gaming
     lutris
