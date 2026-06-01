@@ -55,6 +55,7 @@
     graphite
     cinny-desktop
     imagemagick
+    sigil
 
     # Gaming
     lutris
