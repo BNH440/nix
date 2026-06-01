@@ -2,6 +2,7 @@
   self,
   pkgs,
   inputs,
+  config,
   ...
 }:
 
@@ -9,7 +10,9 @@ let
   openssh-sk-standalone = import ./pkgs/openssh-sk-standalone.nix { inherit pkgs; };
 in
 {
-  imports = [ ];
+  imports = [
+    ../../modules/secrets.nix
+  ];
 
   users.users.blakeh = {
     name = "blakeh";
@@ -97,6 +100,18 @@ in
   nix.settings.trusted-public-keys = [
     "nixcache.blakehaug.com-1:gCvj6d/XaSiX6YpelqVPX/kCZAfvAraN8BhtN22TG50="
   ];
+
+  networking.hostName = "hikari";
+  age.secrets.niks3-auth-token = {
+    owner = "blakeh";
+    group = "staff";
+    rekeyFile = ../../secrets/niks3-auth-token.age;
+  };
+
+  environment.variables = {
+    NIKS3_SERVER_URL = "https://nixcache.blakehaug.com";
+    NIKS3_AUTH_TOKEN_FILE = config.age.secrets.niks3-auth-token.path;
+  };
 
   # Set Git commit hash for darwin-version.
   system.configurationRevision = self.rev or self.dirtyRev or null;

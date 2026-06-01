@@ -174,8 +174,8 @@
         specialArgs = { inherit inputs self; };
         modules = [
           ./hosts/hikari/default.nix
-          # agenix.darwinModules.default
-          # agenix-rekey.darwinModules.default
+          agenix.darwinModules.default
+          agenix-rekey.darwinModules.default
           nix-index-database.darwinModules.default
           home-manager.darwinModules.home-manager
           {
@@ -252,7 +252,7 @@
       agenix-rekey = agenix-rekey.configure {
         userFlake = self;
         nixosConfigurations = self.nixosConfigurations;
-        # darwinConfigurations = self.darwinConfigurations or { };
+        darwinConfigurations = self.darwinConfigurations;
       };
 
       formatter = forEachSystem (
