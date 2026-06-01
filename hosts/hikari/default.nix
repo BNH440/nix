@@ -29,10 +29,6 @@ in
     aseprite
     cinny-desktop
     aerospace
-    anki
-    tor-browser
-    sublime
-    sublime-merge
     prismlauncher
     postman
     obsidian
@@ -40,9 +36,6 @@ in
     mos
     halloy
     google-chrome
-    gimp
-    calibre
-    anki
     jetbrains.pycharm
     jetbrains.datagrip
     jetbrains.rust-rover
