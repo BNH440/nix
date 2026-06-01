@@ -56,6 +56,9 @@
     cinny-desktop
     imagemagick
     sigil
+    tor-browser
+    sublime
+    sublime-merge
 
     # Gaming
     lutris

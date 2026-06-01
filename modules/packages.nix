@@ -8,7 +8,7 @@
   imports = [ ];
 
   environment.systemPackages = with pkgs; [
-    # Tools
+    # Essential Packages (All others are in home/default.nix)
     vim
     wget
     tree
@@ -16,10 +16,6 @@
     fastfetch
     git
     dig
-
-    # Dev
-    nil
-    nixd
 
     # Cache
     inputs.niks3.packages.${pkgs.stdenv.hostPlatform.system}.niks3

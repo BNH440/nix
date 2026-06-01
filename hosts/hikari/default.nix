@@ -23,17 +23,38 @@ in
   environment.systemPackages = with pkgs; [
     # Nix related
     nh
-    nil
-    nixd
     devenv
 
     # Graphical
     aseprite
     cinny-desktop
-    imagemagick
+    aerospace
+    anki
+    tor-browser
+    sublime
+    sublime-merge
+    prismlauncher
+    postman
+    obsidian
+    notion-app
+    mos
+    halloy
+    google-chrome
+    gimp
+    calibre
+    anki
+    jetbrains.pycharm
+    jetbrains.datagrip
+    jetbrains.rust-rover
 
-    # Misc
-    mosh
+    # CLI
+    imagemagick
+    avrdude
+    epubcheck
+    prettier
+    pandoc
+    darwin.lsusb
+    coreutils-prefixed # replaces homebrew `coreutils`
 
     # Cache
     inputs.niks3.packages.${pkgs.stdenv.hostPlatform.system}.niks3
