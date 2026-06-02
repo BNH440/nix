@@ -62,11 +62,7 @@ jobs:
 
       - uses: DeterminateSystems/nix-installer-action@main
         with:
-          extra-conf: |
-            experimental-features = nix-command flakes
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-            max-jobs = auto
-            cores = 0
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure Niks3
         uses: Mic92/niks3-action@v1
