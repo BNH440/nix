@@ -37,9 +37,24 @@
     yubikey-manager
     yt-dlp
     claude-code
+    gemini-cli
+    github-copilot-cli
     inputs.tsexit.packages.${pkgs.stdenv.hostPlatform.system}.default
     teleport
     ncdu
+    nil
+    nixd
+    vim
+    wget
+    tree
+    htop
+    gtop
+    git
+    dig
+    curl
+    gping
+    tmux
+    mosh
   ];
 
   home.shellAliases = {

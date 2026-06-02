@@ -2,6 +2,7 @@
   self,
   pkgs,
   inputs,
+  config,
   ...
 }:
 
@@ -9,7 +10,9 @@ let
   openssh-sk-standalone = import ./pkgs/openssh-sk-standalone.nix { inherit pkgs; };
 in
 {
-  imports = [ ];
+  imports = [
+    ../../modules/secrets.nix
+  ];
 
   users.users.blakeh = {
     name = "blakeh";
@@ -23,17 +26,31 @@ in
   environment.systemPackages = with pkgs; [
     # Nix related
     nh
-    nil
-    nixd
     devenv
 
     # Graphical
     aseprite
     cinny-desktop
-    imagemagick
+    aerospace
+    prismlauncher
+    postman
+    obsidian
+    notion-app
+    mos
+    halloy
+    google-chrome
+    jetbrains.pycharm
+    jetbrains.datagrip
+    jetbrains.rust-rover
 
-    # Misc
-    mosh
+    # CLI
+    imagemagick
+    avrdude
+    epubcheck
+    prettier
+    pandoc
+    darwin.lsusb
+    coreutils-prefixed # replaces homebrew `coreutils`
 
     # Cache
     inputs.niks3.packages.${pkgs.stdenv.hostPlatform.system}.niks3
@@ -43,6 +60,12 @@ in
   ];
 
   system.primaryUser = "blakeh";
+
+  # allow touch-id sudo
+  security.pam.services.sudo_local = {
+    enable = true;
+    touchIdAuth = true;
+  };
 
   # setup ssh agent
   launchd.user.agents.ssh-agent = {
@@ -83,6 +106,18 @@ in
   nix.settings.trusted-public-keys = [
     "nixcache.blakehaug.com-1:gCvj6d/XaSiX6YpelqVPX/kCZAfvAraN8BhtN22TG50="
   ];
+
+  networking.hostName = "hikari";
+  age.secrets.niks3-auth-token = {
+    owner = "blakeh";
+    group = "staff";
+    rekeyFile = ../../secrets/niks3-auth-token.age;
+  };
+
+  environment.variables = {
+    NIKS3_SERVER_URL = "https://nixcache.blakehaug.com";
+    NIKS3_AUTH_TOKEN_FILE = config.age.secrets.niks3-auth-token.path;
+  };
 
   # Set Git commit hash for darwin-version.
   system.configurationRevision = self.rev or self.dirtyRev or null;
