@@ -55,6 +55,9 @@
     gping
     tmux
     mosh
+    dix
+    nix-output-monitor
+    nix-fast-build
   ];
 
   home.shellAliases = {
