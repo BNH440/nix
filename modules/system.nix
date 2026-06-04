@@ -3,11 +3,16 @@
   pkgs,
   inputs,
   pubkeys,
+  self,
   ...
 }:
 
 {
   imports = [ ];
+
+  # embed git commit in nixos-version
+  system.configurationRevision = self.rev or self.dirtyRev or "dirty";
+  system.nixos.label = "git-${self.shortRev or self.dirtyShortRev or "dirty"}";
 
   # Enable Flakes
   nix.settings.experimental-features = [

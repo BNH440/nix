@@ -108,7 +108,7 @@
     {
       nixosConfigurations = {
         ronri = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs pubkeys; };
+          specialArgs = { inherit inputs pubkeys self; };
           modules = [
             ./hosts/ronri/default.nix
             agenix.nixosModules.default
@@ -127,7 +127,7 @@
           ];
         };
         kako = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs pubkeys; };
+          specialArgs = { inherit inputs pubkeys self; };
           modules = [
             ./hosts/kako/default.nix
             agenix.nixosModules.default
@@ -148,7 +148,7 @@
           ];
         };
         ito = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs pubkeys; };
+          specialArgs = { inherit inputs pubkeys self; };
           modules = [
             ./hosts/ito/default.nix
             agenix.nixosModules.default
