@@ -88,4 +88,10 @@
     "esp6"
     "rxrpc"
   ];
+
+  # auto garbage collect nix-store
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+  };
 }

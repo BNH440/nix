@@ -129,6 +129,16 @@ in
   # Enable unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # auto garbage collect nix-store
+  nix.gc = {
+    automatic = true;
+    interval = {
+      Hour = 3;
+      Minute = 15;
+      Weekday = 7;
+    };
+  };
+
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = "aarch64-darwin";
 }
