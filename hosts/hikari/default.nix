@@ -62,6 +62,29 @@ in
 
   system.primaryUser = "blakeh";
 
+  homebrew = {
+    enable = true;
+    enableZshIntegration = true;
+    onActivation = {
+      autoUpdate = true;
+      upgrade = true;
+      cleanup = "zap";
+      extraEnv = {
+        "HOMEBREW_ASK" = "0";
+      };
+    };
+    global.autoUpdate = false;
+    taps = [
+      "lajosdeme/utils"
+    ];
+    brews = [
+      "lajosdeme/utils/xcclear"
+    ];
+    casks = [
+      "notunes"
+    ];
+  };
+
   # allow touch-id sudo
   security.pam.services.sudo_local = {
     enable = true;
