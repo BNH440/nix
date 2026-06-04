@@ -51,6 +51,7 @@ in
     pandoc
     darwin.lsusb
     coreutils-prefixed # replaces homebrew `coreutils`
+    neovim
 
     # Cache
     inputs.niks3.packages.${pkgs.stdenv.hostPlatform.system}.niks3
