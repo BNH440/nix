@@ -2,11 +2,12 @@
   description = "NixOS flake for blakeh nix machines";
 
   inputs = {
-    flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+      inputs.systems.follows = "systems";
     };
     agenix-rekey = {
       url = "github:oddlama/agenix-rekey";
@@ -79,7 +80,6 @@
       home-manager,
       nix-index-database,
       nix-darwin,
-      flake-utils,
       colmena,
       disko,
       lanzaboote,
@@ -98,72 +98,65 @@
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMVCtRg036ANP+l/vmvzj6EJZL2Ic8s5y5tqyMoaOzrs" # ronri
         "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBF16Vm3gwviIP1dg/EAx1xxofFm8No8zN6UGYpEM4D72KusDFYwa2M4F+bvf+a0K01OJNNGUnsxFTyizQxwsPj4=" # phone
       ];
+
       forEachSystem = nixpkgs.lib.genAttrs (import systems);
-    in
-    {
-      nixosConfigurations = {
-        ronri = nixpkgs.lib.nixosSystem {
+
+      ocfPkgs = import nixpkgs {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+      };
+
+      hmOptions = hmConfig: {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.users.blakeh = hmConfig;
+        home-manager.backupFileExtension = "hm-backup";
+        home-manager.extraSpecialArgs = { inherit inputs; };
+      };
+
+      mkConfiguration =
+        {
+          hostname,
+          hmConfig ? ./home/default.nix,
+          extraModules ? [ ],
+        }:
+        nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs pubkeys self; };
           modules = [
-            ./hosts/ronri/default.nix
+            ./hosts/${hostname}/default.nix
             agenix.nixosModules.default
             agenix-rekey.nixosModules.default
             niks3.nixosModules.niks3
             niks3.nixosModules.niks3-auto-upload
-            nix-index-database.nixosModules.default
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.blakeh = ./home/default.nix;
-              home-manager.backupFileExtension = "hm-backup";
-              home-manager.extraSpecialArgs = { inherit inputs; };
-            }
-          ];
-        };
-        kako = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs pubkeys self; };
-          modules = [
-            ./hosts/kako/default.nix
-            agenix.nixosModules.default
-            agenix-rekey.nixosModules.default
-            niks3.nixosModules.niks3
-            niks3.nixosModules.niks3-auto-upload
-            nix-index-database.nixosModules.default
-            home-manager.nixosModules.home-manager
             disko.nixosModules.disko
+            nix-index-database.nixosModules.default
+            home-manager.nixosModules.home-manager
+            (hmOptions hmConfig)
+          ]
+          ++ extraModules;
+        };
+
+      nixosHosts = {
+        ronri = { };
+        kako = {
+          extraModules = [
             copyparty.nixosModules.default
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.blakeh = ./home/default.nix;
-              home-manager.backupFileExtension = "hm-backup";
-              home-manager.extraSpecialArgs = { inherit inputs; };
-            }
           ];
         };
-        ito = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs pubkeys self; };
-          modules = [
-            ./hosts/ito/default.nix
-            agenix.nixosModules.default
-            agenix-rekey.nixosModules.default
-            niks3.nixosModules.niks3-auto-upload
-            nix-index-database.nixosModules.default
-            disko.nixosModules.disko
+        ito = {
+          hmConfig = ./hosts/ito/home.nix;
+          extraModules = [
             lanzaboote.nixosModules.lanzaboote
-            home-manager.nixosModules.home-manager
             aagl.nixosModules.default
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.blakeh = ./hosts/ito/home.nix;
-              home-manager.backupFileExtension = "hm-backup";
-              home-manager.extraSpecialArgs = { inherit inputs; };
-            }
           ];
         };
       };
+    in
+    {
+      nixosConfigurations = builtins.mapAttrs (
+        name: configArgs: mkConfiguration ({ hostname = name; } // configArgs)
+      ) nixosHosts;
+
       darwinConfigurations.hikari = nix-darwin.lib.darwinSystem {
         specialArgs = { inherit inputs self; };
         modules = [
@@ -172,22 +165,12 @@
           agenix-rekey.darwinModules.default
           nix-index-database.darwinModules.default
           home-manager.darwinModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.blakeh = ./hosts/hikari/home.nix;
-            home-manager.backupFileExtension = "hm-backup";
-            home-manager.extraSpecialArgs = { inherit inputs; };
-          }
+          (hmOptions ./hosts/hikari/home.nix)
         ];
       };
 
-      # standalone home-manager config for OCF desktops and servers
       homeConfigurations."ocf-server" = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {
-          system = "x86_64-linux";
-          config.allowUnfree = true;
-        };
+        pkgs = ocfPkgs;
         modules = [
           ./home/default.nix
           ./hosts/ocf/server.nix
@@ -195,10 +178,7 @@
         extraSpecialArgs = { inherit inputs; };
       };
       homeConfigurations."ocf-desktop" = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {
-          system = "x86_64-linux";
-          config.allowUnfree = true;
-        };
+        pkgs = ocfPkgs;
         modules = [
           ./home/default.nix
           ./hosts/ocf/desktop.nix
@@ -206,42 +186,25 @@
         extraSpecialArgs = { inherit inputs; };
       };
 
-      colmenaHive = colmena.lib.makeHive {
-        meta = {
-          nixpkgs = import nixpkgs { system = "x86_64-linux"; };
-          nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) self.nixosConfigurations;
-          nodeSpecialArgs = builtins.mapAttrs (
-            name: value: value._module.specialArgs
-          ) self.nixosConfigurations;
-        };
-
-        ronri = {
-          imports = self.nixosConfigurations.ronri._module.args.modules;
+      colmenaHive = colmena.lib.makeHive (
+        {
+          meta = {
+            nixpkgs = import nixpkgs { system = "x86_64-linux"; };
+            nodeNixpkgs = builtins.mapAttrs (name: value: value.pkgs) self.nixosConfigurations;
+            nodeSpecialArgs = builtins.mapAttrs (
+              name: value: value._module.specialArgs
+            ) self.nixosConfigurations;
+          };
+        }
+        // builtins.mapAttrs (name: config: {
+          imports = config._module.args.modules;
           deployment = {
-            targetHost = "ronri";
+            targetHost = name;
             targetUser = "blakeh";
             buildOnTarget = true;
           };
-        };
-
-        kako = {
-          imports = self.nixosConfigurations.kako._module.args.modules;
-          deployment = {
-            targetHost = "kako";
-            targetUser = "blakeh";
-            buildOnTarget = true;
-          };
-        };
-
-        ito = {
-          imports = self.nixosConfigurations.ito._module.args.modules;
-          deployment = {
-            targetHost = "ito";
-            targetUser = "blakeh";
-            buildOnTarget = true;
-          };
-        };
-      };
+        }) self.nixosConfigurations
+      );
 
       agenix-rekey = agenix-rekey.configure {
         userFlake = self;
@@ -261,7 +224,6 @@
         in
         pkgs.writeShellScriptBin "pre-commit-run" script
       );
-
       checks = forEachSystem (system: {
         pre-commit-check = inputs.git-hooks.lib.${system}.run {
           src = ./.;
@@ -270,22 +232,17 @@
           };
         };
       });
-    }
-
-    // flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = [ agenix-rekey.overlays.default ];
-        };
-      in
-      {
-        devShells.default =
-          let
-            inherit (self.checks.${system}.pre-commit-check) shellHook enabledPackages;
-          in
-          pkgs.mkShell {
+      devShells = forEachSystem (
+        system:
+        let
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = [ agenix-rekey.overlays.default ];
+          };
+          inherit (self.checks.${system}.pre-commit-check) shellHook enabledPackages;
+        in
+        {
+          default = pkgs.mkShell {
             inherit shellHook;
             buildInputs = enabledPackages;
             packages = [
@@ -294,6 +251,7 @@
               colmena.packages.${system}.colmena
             ];
           };
-      }
-    );
+        }
+      );
+    };
 }
