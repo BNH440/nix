@@ -43,7 +43,6 @@
       url = "github:nix-community/lanzaboote/v1.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-flatpak.url = "github:gmodena/nix-flatpak";
     aagl = {
       url = "github:ezKEa/aagl-gtk-on-nix/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -78,18 +77,14 @@
       agenix,
       agenix-rekey,
       home-manager,
-      neovim-flake,
       nix-index-database,
       nix-darwin,
       flake-utils,
       colmena,
       disko,
       lanzaboote,
-      nix-flatpak,
       aagl,
-      zen-browser,
       niks3,
-      tsexit,
       copyparty,
       ...
     }@inputs:
@@ -157,7 +152,6 @@
             nix-index-database.nixosModules.default
             disko.nixosModules.disko
             lanzaboote.nixosModules.lanzaboote
-            nix-flatpak.nixosModules.nix-flatpak
             home-manager.nixosModules.home-manager
             aagl.nixosModules.default
             {
