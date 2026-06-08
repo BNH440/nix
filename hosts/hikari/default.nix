@@ -132,6 +132,10 @@ in
     "nixcache.blakehaug.com-1:gCvj6d/XaSiX6YpelqVPX/kCZAfvAraN8BhtN22TG50="
   ];
 
+  # enable linux-builder
+  nix.linux-builder.enable = true;
+  nix.settings.trusted-users = [ "blakeh" ];
+
   networking.hostName = "hikari";
   age.secrets.niks3-auth-token = {
     owner = "blakeh";
