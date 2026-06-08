@@ -59,9 +59,6 @@ in
 
     # enable openssh
     openssh
-
-    # qemu
-    qemu
   ];
 
   system.primaryUser = "blakeh";
@@ -80,9 +77,11 @@ in
     global.autoUpdate = false;
     taps = [
       "lajosdeme/utils"
+      "knazarov/qemu-virgl"
     ];
     brews = [
       "lajosdeme/utils/xcclear"
+      "knazarov/qemu-virgl/qemu-virgl" # patched as shown here https://github.com/knazarov/homebrew-qemu-virgl/issues/83#issuecomment-1051147726
     ];
     casks = [
       "notunes"
