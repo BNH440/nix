@@ -59,6 +59,9 @@ in
 
     # enable openssh
     openssh
+
+    # qemu
+    qemu
   ];
 
   system.primaryUser = "blakeh";
