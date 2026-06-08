@@ -12,6 +12,7 @@ in
 {
   imports = [
     ../../modules/secrets.nix
+    ../../modules/pkgs-config.nix
   ];
 
   users.users.blakeh = {
@@ -149,9 +150,6 @@ in
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
   system.stateVersion = 6;
-
-  # Enable unfree packages
-  nixpkgs.config.allowUnfree = true;
 
   # auto garbage collect nix-store
   nix.gc = {
