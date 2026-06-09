@@ -13,6 +13,7 @@ in
   imports = [
     ../../modules/secrets.nix
     ../../modules/pkgs-config.nix
+    ./restic/default.nix
   ];
 
   users.users.blakeh = {
