@@ -69,10 +69,6 @@ in
     onActivation = {
       autoUpdate = true;
       upgrade = true;
-      cleanup = "zap";
-      extraEnv = {
-        "HOMEBREW_ASK" = "0";
-      };
     };
     global.autoUpdate = false;
     taps = [
