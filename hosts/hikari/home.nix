@@ -9,6 +9,7 @@ in
 {
   imports = [
     ../../home/default.nix
+    ./restic/home.nix
   ];
 
   home.sessionPath = [
