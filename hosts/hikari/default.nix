@@ -69,17 +69,15 @@ in
     onActivation = {
       autoUpdate = true;
       upgrade = true;
-      cleanup = "zap";
-      extraEnv = {
-        "HOMEBREW_ASK" = "0";
-      };
     };
     global.autoUpdate = false;
     taps = [
       "lajosdeme/utils"
+      "knazarov/qemu-virgl"
     ];
     brews = [
       "lajosdeme/utils/xcclear"
+      "knazarov/qemu-virgl/qemu-virgl" # patched as shown here https://github.com/knazarov/homebrew-qemu-virgl/issues/83#issuecomment-1051147726
     ];
     casks = [
       "notunes"
@@ -131,6 +129,23 @@ in
   nix.settings.trusted-public-keys = [
     "nixcache.blakehaug.com-1:gCvj6d/XaSiX6YpelqVPX/kCZAfvAraN8BhtN22TG50="
   ];
+
+  # enable linux-builder
+  nix.linux-builder = {
+    enable = true;
+    ephemeral = true;
+    maxJobs = 2;
+    config = {
+      virtualisation = {
+        darwin-builder = {
+          diskSize = 60 * 1024;
+          memorySize = 8 * 1024;
+        };
+        cores = 4;
+      };
+    };
+  };
+  nix.settings.trusted-users = [ "blakeh" ];
 
   networking.hostName = "hikari";
   age.secrets.niks3-auth-token = {
