@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -103,7 +104,6 @@
 
       ocfPkgs = import nixpkgs {
         system = "x86_64-linux";
-        config.allowUnfree = true;
       };
 
       hmOptions = hmConfig: {

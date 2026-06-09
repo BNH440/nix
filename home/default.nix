@@ -37,7 +37,7 @@
     yubikey-manager
     yt-dlp
     claude-code
-    gemini-cli
+    unstable.antigravity-cli
     github-copilot-cli
     inputs.tsexit.packages.${pkgs.stdenv.hostPlatform.system}.default
     teleport
