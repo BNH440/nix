@@ -20,8 +20,6 @@
     # Cache
     inputs.niks3.packages.${pkgs.stdenv.hostPlatform.system}.niks3
 
-    inputs.neovim-flake.packages.${pkgs.stdenv.hostPlatform.system}.default
-
     nixos-firewall-tool
   ];
 
@@ -43,10 +41,5 @@
 
   environment.shellAliases = {
     switch = "cd ~/.nixos && git pull && nh os switch && cd -";
-  };
-
-  environment.variables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
   };
 }

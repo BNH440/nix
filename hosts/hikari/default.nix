@@ -53,7 +53,6 @@ in
     pandoc
     darwin.lsusb
     coreutils-prefixed # replaces homebrew `coreutils`
-    neovim
 
     # Cache
     inputs.niks3.packages.${pkgs.stdenv.hostPlatform.system}.niks3
@@ -116,9 +115,6 @@ in
 
   # setup nix helper
   environment.variables.NH_FLAKE = "/Users/blakeh/.nixos";
-
-  environment.variables.EDITOR = "vim";
-  environment.variables.VISUAL = "vim";
 
   programs.nix-index-database.comma.enable = true;
 
