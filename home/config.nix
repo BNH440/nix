@@ -7,7 +7,7 @@
 
 {
   home.shellAliases = {
-    ls = "${pkgs.lsd}";
+    ls = "${lib.getExe pkgs.lsd}";
     ll = "ls -l";
     la = "ls -la";
   };
@@ -25,8 +25,8 @@
       gpg.ssh.allowedsignersfile = "${config.home.homeDirectory}/.ssh/allowed_signers";
       user.signingkey = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
       init.defaultbranch = "main";
-      core.pager = "${pkgs.diff-so-fancy} | less --tabs=4 -RF";
-      interactive.diffFilter = "${pkgs.diff-so-fancy} --patch";
+      core.pager = "${lib.getExe pkgs.diff-so-fancy} | less --tabs=4 -RF";
+      interactive.diffFilter = "${lib.getExe pkgs.diff-so-fancy} --patch";
     };
   };
 
