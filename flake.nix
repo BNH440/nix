@@ -242,11 +242,14 @@
       devShells = forEachSystem (
         system:
         let
-          pkgs = import nixpkgs {
-            inherit system;
-            overlays = [ agenix-rekey.overlays.default ];
+          pkgs = nixpkgs.legacyPackages.${system}.extend agenix-rekey.overlays.default;
+          pre-commit-check-shell = inputs.git-hooks.lib.${system}.run {
+            src = pkgs.runCommand "empty-dir" { } "mkdir $out";
+            hooks = {
+              nixfmt.enable = true;
+            };
           };
-          inherit (self.checks.${system}.pre-commit-check) shellHook enabledPackages;
+          inherit (pre-commit-check-shell) shellHook enabledPackages;
         in
         {
           default = pkgs.mkShell {
