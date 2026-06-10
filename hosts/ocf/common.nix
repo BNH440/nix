@@ -20,5 +20,6 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
+    SKIP_OCF_ZSHRC = "1";
   };
 }
