@@ -12,6 +12,9 @@ in
     ./restic/home.nix
   ];
 
+  # add antigravity only on graphical machines
+  home.packages = [ pkgs.unstable.antigravity-cli ];
+
   home.sessionPath = [
     "/usr/local/bin"
     "/Users/blakeh/scripts"
