@@ -31,7 +31,6 @@ in
   programs = {
     firefox = {
       enable = true;
-      package = null;
       # policies = {
       #   # got this from https://discourse.nixos.org/t/declare-firefox-extensions-and-settings/36265
       #   DisableTelemetry = true;
@@ -102,7 +101,7 @@ in
               "https://printhost.ocf.berkeley.edu/jobs/|http://logjam/|http://papercut/|http://pagefault/|http://fishpaper";
           };
 
-          extensions.packages = with inputs.firefox-addons.packages.${pkgs.stdenv.hostPlatform.system}; [
+          extensions.packages = with inputs.ocf-firefox-addons.packages.${pkgs.stdenv.hostPlatform.system}; [
             ublock-origin
             bitwarden
             darkreader

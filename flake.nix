@@ -65,9 +65,14 @@
       url = "github:9001/copyparty";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    firefox-addons = {
+    ocf-nix.url = "github:ocf/nix";
+    ocf-home-manager = {
+      url = "github:nix-community/home-manager/release-25.11";
+      inputs.nixpkgs.follows = "ocf-nix/nixpkgs";
+    };
+    ocf-firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "ocf-nix/nixpkgs";
     };
   };
 
@@ -87,6 +92,8 @@
       aagl,
       niks3,
       copyparty,
+      ocf-nix,
+      ocf-home-manager,
       ...
     }@inputs:
     let
@@ -102,7 +109,7 @@
 
       forEachSystem = nixpkgs.lib.genAttrs (import systems);
 
-      ocfPkgs = import nixpkgs {
+      ocfPkgs = import ocf-nix.inputs.nixpkgs {
         system = "x86_64-linux";
       };
 
@@ -169,7 +176,7 @@
         ];
       };
 
-      homeConfigurations."ocf-server" = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."ocf-server" = ocf-home-manager.lib.homeManagerConfiguration {
         pkgs = ocfPkgs;
         modules = [
           ./home/default.nix
@@ -177,7 +184,7 @@
         ];
         extraSpecialArgs = { inherit inputs; };
       };
-      homeConfigurations."ocf-desktop" = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."ocf-desktop" = ocf-home-manager.lib.homeManagerConfiguration {
         pkgs = ocfPkgs;
         modules = [
           ./home/config.nix
