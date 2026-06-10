@@ -3,6 +3,7 @@
   pkgs,
   inputs,
   pubkeys,
+  yubikeys,
   self,
   ...
 }:
@@ -60,10 +61,21 @@
     hashedPasswordFile = config.age.secrets.blakeh-password-hash.path;
   };
 
+  users.groups.deploy-user = { };
+  nix.settings.trusted-users = [ "deploy-user" ];
+
+  users.users.deploy-user = {
+    isNormalUser = true;
+    group = "deploy-user";
+    createHome = false;
+    home = "/var/empty";
+    openssh.authorizedKeys.keys = yubikeys;
+  };
+
   # fix colmena apply needing interactive sudo password entry
   security.sudo.extraRules = [
     {
-      users = [ "blakeh" ];
+      users = [ "deploy-user" ];
       commands = [
         {
           command = "/run/current-system/sw/bin/nix-store --no-gc-warning --realise /nix/store/*";
