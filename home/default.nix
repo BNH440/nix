@@ -32,7 +32,6 @@
     restic
     rhash
     speedtest-cli
-    pay-respects
     wakeonlan
     yubikey-manager
     yt-dlp
@@ -83,11 +82,7 @@
     };
   };
 
-  programs.fzf = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
+  # Shell
   programs.zsh = {
     enable = true;
     defaultKeymap = "emacs";
@@ -96,8 +91,15 @@
       ${builtins.readFile ./p10k.zsh}
     '';
   };
-
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
   programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+  programs.pay-respects = {
     enable = true;
     enableZshIntegration = true;
   };
