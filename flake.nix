@@ -172,7 +172,7 @@
       homeConfigurations."ocf-server" = home-manager.lib.homeManagerConfiguration {
         pkgs = ocfPkgs;
         modules = [
-          ./home/default.nix
+          ./home/config.nix
           ./hosts/ocf/server.nix
         ];
         extraSpecialArgs = { inherit inputs; };
@@ -180,7 +180,7 @@
       homeConfigurations."ocf-desktop" = home-manager.lib.homeManagerConfiguration {
         pkgs = ocfPkgs;
         modules = [
-          ./home/default.nix
+          ./home/config.nix
           ./hosts/ocf/desktop.nix
         ];
         extraSpecialArgs = { inherit inputs; };

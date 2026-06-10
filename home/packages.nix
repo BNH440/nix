@@ -1,0 +1,56 @@
+{
+  inputs,
+  pkgs,
+  ...
+}:
+
+{
+  home.packages = with pkgs; [
+    bat
+    lsd
+    ripgrep-all
+    aria2
+    btop
+    croc
+    diff-so-fancy
+    dos2unix
+    exiftool
+    fastfetch
+    ffmpeg
+    gh
+    glow
+    jq
+    iperf
+    lazygit
+    pre-commit
+    qrencode
+    rclone
+    restic
+    rhash
+    speedtest-cli
+    wakeonlan
+    yubikey-manager
+    yt-dlp
+    claude-code
+    github-copilot-cli
+    inputs.tsexit.packages.${pkgs.stdenv.hostPlatform.system}.default
+    teleport
+    ncdu
+    nil
+    nixd
+    vim
+    wget
+    tree
+    htop
+    gtop
+    git
+    dig
+    curl
+    gping
+    tmux
+    mosh
+    dix
+    nix-output-monitor
+    nix-fast-build
+  ];
+}
