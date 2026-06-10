@@ -34,7 +34,6 @@
         "/Users/blakehaug/Library/Application Support/zen"
         "/Users/blakehaug/.ssh"
         "/Users/blakehaug/.zshrc"
-        "/Users/blakehaug/Backups"
         "/Users/blakehaug/scripts"
         "/Users/blakehaug/.config"
       ];
