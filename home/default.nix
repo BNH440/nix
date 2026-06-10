@@ -84,15 +84,18 @@
     };
   };
 
-  programs.zsh.enable = true;
-  programs.zsh.defaultKeymap = "emacs";
-  programs.starship = {
+  programs.fzf = {
     enable = true;
     enableZshIntegration = true;
-    settings = lib.mkMerge [
-      (lib.importTOML ./starship-nerd-font-symbols.toml)
-      (lib.importTOML ./starship.toml)
-    ];
+  };
+
+  programs.zsh = {
+    enable = true;
+    defaultKeymap = "emacs";
+    initContent = lib.mkBefore ''
+      source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+      ${builtins.readFile ./p10k.zsh}
+    '';
   };
 
   programs.zoxide = {
