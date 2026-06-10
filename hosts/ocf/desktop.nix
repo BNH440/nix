@@ -130,15 +130,13 @@ in
     #   };
   };
 
-  services.hyprpaper = {
-    enable = true;
-    settings = {
-      preload = [
-        "${kafu}"
-      ];
-      wallpaper = [
-        ", ${kafu}"
-      ];
-    };
+  xdg.configFile."cosmic/com.system76.CosmicSettings.Wallpaper/v1/custom-images" = {
+    text = ''
+      [
+        "${kafu}",
+        "${kafu}",
+      ]
+    '';
+    force = true;
   };
 }
