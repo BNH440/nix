@@ -59,6 +59,13 @@
     winetricks
   ];
 
+  # TODO remove once bitwarden-desktop has updated electron
+  # https://github.com/NixOS/nixpkgs/issues/526914
+  # https://github.com/bitwarden/clients/pull/20448
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-39.8.10"
+  ];
+
   # Gaming
   programs.steam = {
     enable = true;
