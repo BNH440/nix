@@ -9,7 +9,7 @@
 
   # fix lutris openldap issue
   # TODO: remove when fixed
-  # status: https://nixpk.gs/pr-tracker.html?pr=515956
+  # status: https://nixpk.gs/pr-tracker.html?pr=522648
   nixpkgs.overlays = [
     (_: prev: {
       openldap = prev.openldap.overrideAttrs {
