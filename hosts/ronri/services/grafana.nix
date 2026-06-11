@@ -40,7 +40,10 @@ let
       {
         name = "host";
         type = "query";
-        datasource = "Loki";
+        datasource = {
+          type = "loki";
+          uid = "Loki";
+        };
         query = ''label_values({job="systemd-journal"}, host)'';
         refresh = 2;
         includeAll = true;
@@ -57,7 +60,10 @@ let
         id = 1;
         title = "Log volume by level";
         type = "timeseries";
-        datasource = "Loki";
+        datasource = {
+          type = "loki";
+          uid = "Loki";
+        };
         gridPos = {
           x = 0;
           y = 0;
@@ -91,7 +97,10 @@ let
         id = 2;
         title = "Logs";
         type = "logs";
-        datasource = "Loki";
+        datasource = {
+          type = "loki";
+          uid = "Loki";
+        };
         gridPos = {
           x = 0;
           y = 6;
@@ -128,7 +137,10 @@ let
       {
         name = "pool";
         type = "query";
-        datasource = "Prometheus";
+        datasource = {
+          type = "prometheus";
+          uid = "Prometheus";
+        };
         query = "label_values(zfs_pool_size_bytes, pool)";
         refresh = 2;
         includeAll = true;
@@ -142,7 +154,10 @@ let
       {
         name = "type";
         type = "query";
-        datasource = "Prometheus";
+        datasource = {
+          type = "prometheus";
+          uid = "Prometheus";
+        };
         query = "label_values(zfs_dataset_used_bytes, type)";
         refresh = 2;
         includeAll = false;
@@ -156,7 +171,10 @@ let
       {
         name = "dataset";
         type = "query";
-        datasource = "Prometheus";
+        datasource = {
+          type = "prometheus";
+          uid = "Prometheus";
+        };
         query = ''label_values(zfs_dataset_used_bytes{pool=~"$pool", type=~"$type"}, name)'';
         refresh = 2;
         includeAll = true;
@@ -173,7 +191,10 @@ let
         id = 1;
         title = "Pool health";
         type = "stat";
-        datasource = "Prometheus";
+        datasource = {
+          type = "prometheus";
+          uid = "Prometheus";
+        };
         gridPos = {
           x = 0;
           y = 0;
@@ -241,7 +262,10 @@ let
         id = 2;
         title = "Pool capacity used";
         type = "gauge";
-        datasource = "Prometheus";
+        datasource = {
+          type = "prometheus";
+          uid = "Prometheus";
+        };
         gridPos = {
           x = 6;
           y = 0;
@@ -294,7 +318,10 @@ let
         id = 3;
         title = "Pool fragmentation";
         type = "stat";
-        datasource = "Prometheus";
+        datasource = {
+          type = "prometheus";
+          uid = "Prometheus";
+        };
         gridPos = {
           x = 12;
           y = 0;
@@ -328,7 +355,10 @@ let
         id = 4;
         title = "Pool dedup ratio";
         type = "stat";
-        datasource = "Prometheus";
+        datasource = {
+          type = "prometheus";
+          uid = "Prometheus";
+        };
         gridPos = {
           x = 18;
           y = 0;
@@ -362,7 +392,10 @@ let
         id = 5;
         title = "Pool allocated vs free";
         type = "timeseries";
-        datasource = "Prometheus";
+        datasource = {
+          type = "prometheus";
+          uid = "Prometheus";
+        };
         gridPos = {
           x = 0;
           y = 4;
@@ -404,7 +437,10 @@ let
         id = 6;
         title = "Top datasets by used bytes";
         type = "bargauge";
-        datasource = "Prometheus";
+        datasource = {
+          type = "prometheus";
+          uid = "Prometheus";
+        };
         gridPos = {
           x = 0;
           y = 11;
@@ -438,7 +474,10 @@ let
         id = 7;
         title = "Dataset used vs available";
         type = "timeseries";
-        datasource = "Prometheus";
+        datasource = {
+          type = "prometheus";
+          uid = "Prometheus";
+        };
         gridPos = {
           x = 12;
           y = 11;
@@ -532,6 +571,7 @@ in
         {
           name = "Prometheus";
           type = "prometheus";
+          uid = "Prometheus";
           url = "http://127.0.0.1:9090";
           isDefault = true;
           editable = false;
@@ -539,6 +579,7 @@ in
         {
           name = "Loki";
           type = "loki";
+          uid = "Loki";
           url = "http://127.0.0.1:3100";
           editable = false;
         }
