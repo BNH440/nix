@@ -25,7 +25,7 @@
 
     globals.mapleader = " ";
 
-    colorschemes.catppuccin.enable = true;
+    extraConfigLua = builtins.readFile ./theme.lua;
 
     plugins = {
       # highlighting

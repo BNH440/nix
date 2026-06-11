@@ -6,6 +6,6 @@
   imports = [
     ./config.nix
     ./packages.nix
-    ./neovim.nix
+    ./neovim/default.nix
   ];
 }
