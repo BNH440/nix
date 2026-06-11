@@ -92,12 +92,4 @@
       ];
     }
   ];
-
-  # CVE-2026-31431 & CVE-2026-43284
-  boot.blacklistedKernelModules = [
-    "algif_aead"
-    "esp4"
-    "esp6"
-    "rxrpc"
-  ];
 }
