@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  checks: write
   id-token: write
 
 concurrency:
@@ -17,71 +18,5 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: ${{ matrix.name }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: hikari
-            target: darwinConfigurations.hikari.system
-            os: macos-latest
-          - name: ronri
-            target: nixosConfigurations.ronri.config.system.build.toplevel
-            os: ubuntu-latest
-          - name: ito
-            target: nixosConfigurations.ito.config.system.build.toplevel
-            os: ubuntu-latest
-          - name: kako
-            target: nixosConfigurations.kako.config.system.build.toplevel
-            os: ubuntu-24.04-arm
-          - name: devshell-x86_64-linux
-            target: devShells.x86_64-linux.default
-            os: ubuntu-latest
-          - name: devshell-aarch64-linux
-            target: devShells.aarch64-linux.default
-            os: ubuntu-24.04-arm
-          - name: devshell-aarch64-darwin
-            target: devShells.aarch64-darwin.default
-            os: macos-latest
-
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Free disk space
-        if: runner.os == 'Linux'
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: false
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: false
-          swap-storage: true
-
-      - name: Fix action runner security config
-        if: runner.os == 'Linux'
-        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
-
-      - uses: DeterminateSystems/nix-installer-action@main
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Configure Niks3
-        uses: Mic92/niks3-action@v1
-        with:
-          server-url: ${{ vars.NIKS3_SERVER }}
-
-      - name: Build and push ${{ matrix.name }}
-        env:
-          EVENT: ${{ github.event_name }}
-        run: |
-          extra_args=()
-          if [ "$EVENT" != "schedule" ]; then
-            extra_args+=(--skip-cached)
-          fi
-          nix run nixpkgs#nix-fast-build -- \
-            "${extra_args[@]}" \
-            --no-nom \
-            --flake ".#${{ matrix.target }}"
+  Atelier:
+    uses: stepbrobd/atelier/.github/workflows/discover.yaml@master
