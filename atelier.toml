@@ -10,7 +10,8 @@ include = [
   "checks.*",
   "nixosConfigurations.*",
   "darwinConfigurations.*",
-  "homeConfigurations.*"
+  "homeConfigurations.ocf-desktop.activationPackage"
+  "homeConfigurations.ocf-server.activationPackage"
 ]
 
 exclude = [ ]
