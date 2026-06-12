@@ -1,0 +1,17 @@
+systems = [
+  "x86_64-linux",
+  "aarch64-linux",
+  "aarch64-darwin"
+]
+
+include = [
+  "devShells.*.default",
+  "formatter.*",
+  "checks.*",
+  "nixosConfigurations.*",
+  "darwinConfigurations.*",
+]
+
+exclude = [ ]
+
+substituters = [ "https://nixcache.blakehaug.com" ]
