@@ -1,6 +1,7 @@
 {
   pkgs,
   inputs,
+  lib,
   ...
 }:
 
@@ -22,6 +23,11 @@
   services.desktopManager.plasma6.enable = true;
   services.displayManager.plasma-login-manager.enable = true;
   services.xserver.enable = true;
+
+  # Niri WM
+  programs.niri.enable = true;
+  environment.etc."niri/config.kdl".text = builtins.readFile ./niri-config.kdl;
+  services.gnome.gcr-ssh-agent.enable = lib.mkForce false;
 
   # Graphical apps
   environment.systemPackages = with pkgs; [
@@ -57,6 +63,9 @@
     prismlauncher
     wineWow64Packages.stagingFull
     winetricks
+
+    # Shell
+    noctalia-shell
   ];
 
   # TODO remove once bitwarden-desktop has updated electron
