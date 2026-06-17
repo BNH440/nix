@@ -47,9 +47,11 @@
   environment.shells = with pkgs; [ zsh ];
   programs.zsh.enable = true;
 
-  age.secrets.blakeh-password-hash.rekeyFile = ../secrets/blakeh-password-hash.age;
-
+  # make sure users match this list
   users.mutableUsers = false;
+
+  # main user setup
+  age.secrets.blakeh-password-hash.rekeyFile = ../secrets/blakeh-password-hash.age;
   users.users.blakeh = {
     isNormalUser = true;
     extraGroups = [
@@ -61,14 +63,14 @@
     hashedPasswordFile = config.age.secrets.blakeh-password-hash.path;
   };
 
+  # deploy-user setup
   users.groups.deploy-user = { };
   nix.settings.trusted-users = [ "deploy-user" ];
-
   users.users.deploy-user = {
-    isNormalUser = true;
+    isSystemUser = true;
+    useDefaultShell = true; # system users don't have shells but one is required for colmena
     group = "deploy-user";
-    createHome = false;
-    home = "/var/empty";
+    description = "Colmena Nix Deploy User";
     openssh.authorizedKeys.keys = yubikeys;
   };
 

@@ -117,13 +117,14 @@ in
       ];
 
       systemd.tmpfiles.rules = [
-        "d /var/www/blakehaug.com 0755 deploy nginx -"
+        "d /var/www/blakehaug.com 0755 blakehaug-web-deploy nginx -"
       ];
 
-      users.users.deploy = {
-        isNormalUser = true;
-        createHome = true;
-        home = "/home/deploy";
+      users.groups.blakehaug-web-deploy = { };
+      users.users.blakehaug-web-deploy = {
+        isSystemUser = true;
+        useDefaultShell = true;
+        group = "blakehaug-web-deploy";
         description = "GitHub Actions Deployment User";
         openssh.authorizedKeys.keys = [
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP/BzaxAtrueXUriQLlEFaM6c4QF1OKH4teqFVhtOU54 github-actions-deploy"
