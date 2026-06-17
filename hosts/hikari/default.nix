@@ -129,7 +129,7 @@ in
 
   # enable linux-builder
   nix.linux-builder = {
-    enable = true;
+    enable = false;
     ephemeral = true;
     maxJobs = 2;
     config = {
