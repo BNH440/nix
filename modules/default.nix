@@ -11,5 +11,6 @@
     ./stats.nix
     ./blakehaug-web.nix
     ./pkgs-config.nix
+    ./oom.nix
   ];
 }
