@@ -34,9 +34,30 @@
   programs.zsh = {
     enable = true;
     defaultKeymap = "emacs";
+    enableCompletion = true;
+    syntaxHighlighting.enable = true;
+    autosuggestion = {
+      enable = true;
+      strategy = [
+        "history"
+        "completion"
+      ];
+    };
+
     initContent = lib.mkBefore ''
-      source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-      ${builtins.readFile ./p10k.zsh}
+      # load pure
+      fpath+=("${pkgs.pure-prompt}/share/zsh/site-functions")
+      autoload -U promptinit; promptinit
+
+      # show git stashes
+      zstyle :prompt:pure:git:stash show yes
+
+      # change virtualenv and git branch colors
+      zstyle :prompt:pure:virtualenv color white
+      zstyle :prompt:pure:git:branch color white
+
+      # activate pure
+      prompt pure
     '';
   };
   programs.fzf = {
