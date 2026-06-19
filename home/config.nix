@@ -34,9 +34,42 @@
   programs.zsh = {
     enable = true;
     defaultKeymap = "emacs";
+    enableCompletion = true;
+    syntaxHighlighting.enable = true;
+    autosuggestion = {
+      enable = true;
+      strategy = [
+        "history"
+        "completion"
+      ];
+    };
+
+    plugins = [
+      {
+        name = "fzf-tab";
+        src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
+      }
+    ];
+
     initContent = lib.mkBefore ''
-      source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-      ${builtins.readFile ./p10k.zsh}
+      fpath=("${pkgs.unstable.pure-prompt}/share/zsh/site-functions" $fpath)
+
+      # show git stashes
+      zstyle :prompt:pure:git:stash show yes
+
+      # fzf-tab settings
+      zstyle ':fzf-tab:complete:cd:*' fzf-preview '${lib.getExe pkgs.lsd} -1 --color=always --icon=always $realpath'
+
+      # change colors
+      zstyle :prompt:pure:virtualenv color white
+      zstyle :prompt:pure:git:branch color 212
+      zstyle :prompt:pure:path color 141
+      zstyle :prompt:pure:user color blue
+      zstyle :prompt:pure:host color blue
+
+      # activate pure
+      autoload -U promptinit; promptinit
+      prompt pure
     '';
   };
   programs.fzf = {

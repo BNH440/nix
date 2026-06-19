@@ -35,16 +35,4 @@ in
   programs.ssh.extraConfig = ''
     SecurityKeyProvider ${openssh-sk-standalone}/lib/sk-libfido2.dylib
   '';
-
-  # amazon kiro cli
-  programs.zsh.initContent = lib.mkMerge [
-    (lib.mkBefore ''
-      # Kiro CLI pre block. Keep at the top of this file.
-      [[ -f "/Users/blakeh/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "/Users/blakeh/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
-    '')
-    (lib.mkAfter ''
-      # Kiro CLI post block. Keep at the bottom of this file.
-      [[ -f "/Users/blakeh/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "/Users/blakeh/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
-    '')
-  ];
 }

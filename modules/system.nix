@@ -45,7 +45,10 @@
 
   # Setup shell
   environment.shells = with pkgs; [ zsh ];
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+    enableCompletion = false; # don't override home-manager completion
+  };
 
   # make sure users match this list
   users.mutableUsers = false;

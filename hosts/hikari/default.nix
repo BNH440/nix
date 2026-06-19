@@ -21,7 +21,10 @@ in
     home = "/Users/blakeh";
   };
 
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+    enableCompletion = false; # don't override home-manager completion
+  };
 
   programs.direnv.enable = true;
 
