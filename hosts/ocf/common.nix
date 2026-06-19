@@ -12,7 +12,7 @@
 
   services.ssh-agent.enable = true;
 
-  programs.ssh.settings."*".identityFile = lib.mkForce "~/.ssh/id_ed25519_sk.pub";
+  programs.ssh.settings."*".identityFile = lib.mkForce "~/.ssh/id_ed25519_sk";
 
   programs.git.settings.user.signingkey =
     lib.mkForce "${config.home.homeDirectory}/.ssh/id_ed25519_sk.pub";
