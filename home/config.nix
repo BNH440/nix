@@ -44,6 +44,13 @@
       ];
     };
 
+    plugins = [
+      {
+        name = "fzf-tab";
+        src = "${pkgs.zsh-fzf-tab}/share/fzf-tab";
+      }
+    ];
+
     initContent = lib.mkBefore ''
       # load pure
       fpath+=("${pkgs.pure-prompt}/share/zsh/site-functions")
@@ -51,6 +58,9 @@
 
       # show git stashes
       zstyle :prompt:pure:git:stash show yes
+
+      # fzf-tab settings
+      zstyle ':fzf-tab:complete:cd:*' fzf-preview 'lsd -1 --color=always --icon=always $realpath'
 
       # change virtualenv and git branch colors
       zstyle :prompt:pure:virtualenv color white
