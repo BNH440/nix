@@ -76,10 +76,6 @@
     enable = true;
     enableZshIntegration = true;
   };
-  programs.zoxide = {
-    enable = true;
-    enableZshIntegration = true;
-  };
   programs.pay-respects = {
     enable = true;
     enableZshIntegration = true;
