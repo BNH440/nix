@@ -52,9 +52,7 @@
     ];
 
     initContent = lib.mkBefore ''
-      # load pure
-      autoload -U promptinit; promptinit
-      prompt pure
+      fpath=("${pkgs.unstable.pure-prompt}/share/zsh/site-functions" $fpath)
 
       # show git stashes
       zstyle :prompt:pure:git:stash show yes
@@ -62,11 +60,15 @@
       # fzf-tab settings
       zstyle ':fzf-tab:complete:cd:*' fzf-preview '${lib.getExe pkgs.lsd} -1 --color=always --icon=always $realpath'
 
-      # change virtualenv and git branch colors
+      # change colors
       zstyle :prompt:pure:virtualenv color white
-      zstyle :prompt:pure:git:branch color white
+      zstyle :prompt:pure:git:branch color 212
+      zstyle :prompt:pure:path color 141
+      zstyle :prompt:pure:user color blue
+      zstyle :prompt:pure:host color blue
 
       # activate pure
+      autoload -U promptinit; promptinit
       prompt pure
     '';
   };
@@ -82,9 +84,6 @@
     enable = true;
     enableZshIntegration = true;
   };
-  home.packages = with pkgs; [
-    pure-prompt # required for `prompt pure` above to work
-  ];
 
   # SSH config
   programs.ssh = {
