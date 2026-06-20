@@ -220,7 +220,7 @@
         // builtins.mapAttrs (name: config: {
           imports = config._module.args.modules;
           deployment = {
-            targetHost = name;
+            targetHost = "${name}-colmena";
             targetUser = "deploy-user";
             buildOnTarget = true;
           };

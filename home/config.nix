@@ -95,6 +95,15 @@
         identityFile = "~/.ssh/id_ed25519";
       };
 
+      "*-colmena" = {
+        proxyCommand = "nc $(sed -e \"s/-colmena//\" <<< \"%h\") %p";
+        forwardAgent = true;
+
+        controlMaster = "auto";
+        controlPath = "~/.ssh/control-%r@%h:%p";
+        controlPersist = "5m";
+      };
+
       "hikari" = {
         hostname = "hikari";
         forwardAgent = true;
@@ -137,19 +146,6 @@
         forwardAgent = true;
       };
     };
-    extraConfig = ''
-      # Begin CS161 instructional machine config
-      Host s330-? s330-??
-        HostName %h.cs.berkeley.edu
-        ProxyJump %r@instgw.eecs.berkeley.edu
-        ForwardAgent yes
-      Match Host *.cs.berkeley.edu
-        Port 22
-        User cs161-amk
-        ServerAliveInterval 60
-        ForwardAgent yes
-      # End CS161 instructional machine config
-    '';
   };
 
   # The state version is required and should stay at the version you
