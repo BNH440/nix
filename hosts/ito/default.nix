@@ -69,5 +69,8 @@
     zfsExporter.enable = true;
   };
 
+  # enable rasdaemon to monitor cpu crashes
+  hardware.rasdaemon.enable = true;
+
   system.stateVersion = "25.11";
 }
