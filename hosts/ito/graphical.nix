@@ -46,6 +46,7 @@
     prismlauncher
     wineWow64Packages.stagingFull
     winetricks
+    protontricks
   ];
 
   # TODO remove once bitwarden-desktop has updated electron
