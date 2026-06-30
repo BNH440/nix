@@ -52,5 +52,6 @@
     dix
     nix-output-monitor
     nix-fast-build
+    nix-tree
   ];
 }
