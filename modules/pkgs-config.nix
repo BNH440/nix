@@ -20,10 +20,5 @@ in
     # https://github.com/NixOS/nixpkgs/issues/526914
     # https://github.com/bitwarden/clients/pull/20448
     "electron-39.8.10"
-
-    # TODO remove once vesktop and teleport are updated
-    # teleport: https://nixpk.gs/pr-tracker.html?pr=536323
-    # vesktop: https://nixpk.gs/pr-tracker.html?pr=536729
-    "pnpm-10.29.2"
   ];
 }
