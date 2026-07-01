@@ -13,6 +13,7 @@ in
   imports = [
     ../../modules/secrets.nix
     ../../modules/pkgs-config.nix
+    ../../modules/direnv.nix
     ./restic/default.nix
   ];
 
@@ -25,8 +26,6 @@ in
     enable = true;
     enableCompletion = false; # don't override home-manager completion
   };
-
-  programs.direnv.enable = true;
 
   environment.systemPackages = with pkgs; [
     # Nix related

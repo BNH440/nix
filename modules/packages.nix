@@ -27,8 +27,6 @@
 
   programs.nix-index-database.comma.enable = true;
 
-  programs.direnv.enable = true;
-
   programs.nh = {
     enable = true;
     clean.enable = true;
