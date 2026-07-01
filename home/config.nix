@@ -51,26 +51,39 @@
       }
     ];
 
-    initContent = lib.mkBefore ''
-      fpath=("${pkgs.unstable.pure-prompt}/share/zsh/site-functions" $fpath)
+    initContent = lib.mkMerge [
+      (lib.mkBefore ''
+        fpath=("${pkgs.unstable.pure-prompt}/share/zsh/site-functions" $fpath)
 
-      # show git stashes
-      zstyle :prompt:pure:git:stash show yes
+        # show git stashes
+        zstyle :prompt:pure:git:stash show yes
 
-      # fzf-tab settings
-      zstyle ':fzf-tab:complete:cd:*' fzf-preview '${lib.getExe pkgs.lsd} -1 --color=always --icon=always $realpath'
+        # fzf-tab settings
+        zstyle ':fzf-tab:complete:cd:*' fzf-preview '${lib.getExe pkgs.lsd} -1 --color=always --icon=always $realpath'
 
-      # change colors
-      zstyle :prompt:pure:virtualenv color white
-      zstyle :prompt:pure:git:branch color 212
-      zstyle :prompt:pure:path color 141
-      zstyle :prompt:pure:user color blue
-      zstyle :prompt:pure:host color blue
+        # change colors
+        zstyle :prompt:pure:virtualenv color white
+        zstyle :prompt:pure:git:branch color 212
+        zstyle :prompt:pure:path color 141
+        zstyle :prompt:pure:user color blue
+        zstyle :prompt:pure:host color blue
 
-      # activate pure
-      autoload -U promptinit; promptinit
-      prompt pure
-    '';
+        # activate pure
+        autoload -U promptinit; promptinit
+        prompt pure
+      '')
+      (lib.mkAfter ''
+        # setup zsh keybindings
+        bindkey '^[[2~' overwrite-mode
+        bindkey '^[[3~' delete-char
+        bindkey '^[[H' beginning-of-line
+        bindkey '^[OH' beginning-of-line
+        bindkey '^[[F' end-of-line
+        bindkey '^[OF' end-of-line
+        bindkey '^[[5~' beginning-of-buffer-or-history
+        bindkey '^[[6~' end-of-buffer-or-history
+      '')
+    ];
   };
   programs.fzf = {
     enable = true;
