@@ -11,7 +11,7 @@
   home.username = "blakeh";
   home.homeDirectory = "/home/b/bl/blakeh";
 
-  services.ssh-agent.enable = true;
+  services.ssh-agent.enable = lib.mkForce false;
 
   programs.ssh.settings."*".identityFile = lib.mkForce "~/.ssh/id_ed25519_sk";
 
@@ -22,6 +22,6 @@
     EDITOR = "nvim";
     VISUAL = "nvim";
     SKIP_OCF_ZSHRC = "1";
-    SSH_ASKPASS = "${pkgs.kdePackages.ksshaskpass.out}/bin/ksshaskpass";
+    # SSH_ASKPASS = "${pkgs.kdePackages.ksshaskpass.out}/bin/ksshaskpass";
   };
 }
