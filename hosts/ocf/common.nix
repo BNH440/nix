@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -21,5 +22,6 @@
     EDITOR = "nvim";
     VISUAL = "nvim";
     SKIP_OCF_ZSHRC = "1";
+    SSH_ASKPASS = "${pkgs.kdePackages.ksshaskpass.out}/bin/ksshaskpass";
   };
 }
