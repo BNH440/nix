@@ -133,9 +133,26 @@ in
     text = ''
       [
         "${kafu}",
-        "${kafu}",
       ]
     '';
+    force = true;
+  };
+  xdg.configFile."cosmic/com.system76.CosmicBackground/v1/all" = {
+    text = ''
+      (
+        output: "all",
+        source: Path("${kafu}"),
+        filter_by_theme: true,
+        rotation_frequency: 300,
+        filter_method: Lanczos,
+        scaling_mode: Zoom,
+        sampling_method: Alphanumeric,
+      )
+    '';
+    force = true;
+  };
+  xdg.configFile."cosmic/com.system76.CosmicBackground/v1/same-on-all" = {
+    text = "true";
     force = true;
   };
 }
