@@ -80,6 +80,7 @@ in
     brews = [
       "lajosdeme/utils/xcclear"
       "knazarov/qemu-virgl/qemu-virgl" # patched as shown here https://github.com/knazarov/homebrew-qemu-virgl/issues/83#issuecomment-1051147726
+      "mole"
     ];
     casks = [
       "notunes"
