@@ -25,7 +25,14 @@
   # Tailscale config
   services.tailscale = {
     enable = true;
+    openFirewall = true;
     useRoutingFeatures = "both";
+    extraSetFlags = [
+      "--accept-routes" # ronri has routes configured in ronri/networking.nix
+      "--advertise-exit-node"
+      "--exit-node-allow-lan-access"
+      "--ssh"
+    ];
   };
 
   # add tailscale CLI and podman config

@@ -37,6 +37,8 @@
   ];
   networking.defaultGateway = "169.229.226.1";
 
+  services.tailscale.extraSetFlags = [ "--advertise-routes=169.229.226.0/24" ];
+
   # Open ports
   # networking.firewall.allowedTCPPorts = [ 25565 ];
   # networking.firewall.allowedUDPPorts = [ 25565 ];
