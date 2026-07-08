@@ -676,6 +676,22 @@
         "type": "github"
       }
     },
+    "git-worktree-scripts": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1768166587,
+        "narHash": "sha256-Tq3MyyCaIl/TQgsN0K4ooD+yRAqIb1/sg4aY3W4cyPs=",
+        "owner": "tomups",
+        "repo": "worktrees-scripts",
+        "rev": "d67f11aa6f967d9bb9081dc0c02bf655c6ee16b0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tomups",
+        "repo": "worktrees-scripts",
+        "type": "github"
+      }
+    },
     "gitignore": {
       "inputs": {
         "nixpkgs": [
@@ -1400,6 +1416,7 @@
         "copyparty": "copyparty",
         "disko": "disko",
         "git-hooks": "git-hooks",
+        "git-worktree-scripts": "git-worktree-scripts",
         "home-manager": "home-manager",
         "lanzaboote": "lanzaboote",
         "niks3": "niks3",

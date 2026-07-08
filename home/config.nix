@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  inputs,
   ...
 }:
 
@@ -27,6 +28,23 @@
       init.defaultbranch = "main";
       core.pager = "${lib.getExe pkgs.diff-so-fancy} | less --tabs=4 -RF";
       interactive.diffFilter = "${lib.getExe pkgs.diff-so-fancy} --patch";
+      alias =
+        let
+          wtadd = "!${inputs.git-worktree-scripts}/wtadd.sh";
+          wtclone = "!${inputs.git-worktree-scripts}/wtclone.sh";
+          wtlist = "!${inputs.git-worktree-scripts}/wtlist.sh";
+          wtremove = "!${inputs.git-worktree-scripts}/wtremove.sh";
+        in
+        {
+          graph = "log --oneline --graph --decorate --all";
+          cm = "commit -m";
+          inherit
+            wtadd
+            wtclone
+            wtlist
+            wtremove
+            ;
+        };
     };
   };
 

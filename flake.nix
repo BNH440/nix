@@ -78,6 +78,10 @@
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "ocf-nix/nixpkgs";
     };
+    git-worktree-scripts = {
+      url = "github:tomups/worktrees-scripts";
+      flake = false;
+    };
   };
 
   outputs =
@@ -98,6 +102,7 @@
       copyparty,
       ocf-nix,
       ocf-home-manager,
+      git-worktree-scripts,
       ...
     }@inputs:
     let
