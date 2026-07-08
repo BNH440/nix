@@ -22,6 +22,7 @@
     EDITOR = "nvim";
     VISUAL = "nvim";
     SKIP_OCF_ZSHRC = "1";
+    PURE_GIT_PULL = "0"; # prevent pure from querying git repo status (prompts yubikey)
     # SSH_ASKPASS = "${pkgs.kdePackages.ksshaskpass.out}/bin/ksshaskpass";
   };
 }
