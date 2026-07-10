@@ -1,0 +1,45 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  colmena-deploy:
+    runs-on: ubuntu-latest
+    environment: colmena-deploy
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          audience: ${{ secrets.TS_AUDIENCE }}
+          tags: tag:ci
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          cat >> ~/.ssh/config <<END
+          Host *-colmena
+            ProxyCommand nc $(sed -e "s/-colmena//" <<< "%h") %p
+            StrictHostKeyChecking no
+          END
+          chmod 600 ~/.ssh/config
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            accept-flake-config = true
+
+      - name: Colmena apply
+        run: |
+          nix develop -c colmena apply
