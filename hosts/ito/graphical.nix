@@ -11,6 +11,7 @@
   services.desktopManager.plasma6.enable = true;
   services.displayManager.plasma-login-manager.enable = true;
   services.xserver.enable = true;
+  programs.kdeconnect.enable = true;
 
   # Graphical apps
   environment.systemPackages = with pkgs; [
