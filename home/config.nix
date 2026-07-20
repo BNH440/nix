@@ -28,6 +28,7 @@
       init.defaultbranch = "main";
       core.pager = "${lib.getExe pkgs.diff-so-fancy} | less --tabs=4 -RF";
       interactive.diffFilter = "${lib.getExe pkgs.diff-so-fancy} --patch";
+      push.autoSetupRemote = true;
       alias =
         let
           wtadd = "!${inputs.git-worktree-scripts}/wtadd.sh";
