@@ -119,7 +119,7 @@ in
 
     gc = {
       enable = true;
-      olderThan = "4320h"; # 6 months
+      olderThan = "2160h"; # 3 months
       failedUploadsOlderThan = "12h";
       schedule = "daily";
       randomizedDelaySec = 1800;
