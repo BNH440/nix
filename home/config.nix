@@ -26,8 +26,6 @@
       gpg.ssh.allowedsignersfile = "${config.home.homeDirectory}/.ssh/allowed_signers";
       user.signingkey = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
       init.defaultbranch = "main";
-      core.pager = "${lib.getExe pkgs.diff-so-fancy} | less --tabs=4 -RF";
-      interactive.diffFilter = "${lib.getExe pkgs.diff-so-fancy} --patch";
       push.autoSetupRemote = true;
       remote.origin.fetch = "+refs/pull/*/head:refs/remotes/origin/pull/*";
       alias =
@@ -40,6 +38,12 @@
         {
           graph = "log --oneline --graph --decorate --all";
           cm = "commit -m";
+          dlog = "-c diff.external=difft log --ext-diff";
+          dl = "dlog";
+          dshow = "-c diff.external=difft show --ext-diff";
+          ds = "dshow";
+          ddiff = "-c diff.external=difft diff";
+          dd = "ddiff";
           inherit
             wtadd
             wtclone
@@ -49,6 +53,11 @@
         };
     };
   };
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+  };
+  programs.difftastic.enable = true;
 
   # Shell
   programs.zsh = {
