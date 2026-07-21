@@ -54,5 +54,6 @@
     nix-fast-build
     nix-tree
     lf
+    hyfetch
   ];
 }
