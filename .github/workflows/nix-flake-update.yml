@@ -3,7 +3,7 @@ name: Nix Flake Update
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 13 * * 1,4"
+    - cron: "0 13 * * *"
 
 jobs:
   update:
