@@ -28,6 +28,7 @@
       init.defaultbranch = "main";
       push.autoSetupRemote = true;
       remote.origin.fetch = "+refs/pull/*/head:refs/remotes/origin/pull/*";
+      worktree.useRelativePaths = true;
       alias =
         let
           wtadd = "!${inputs.git-worktree-scripts}/wtadd.sh";
