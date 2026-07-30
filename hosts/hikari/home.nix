@@ -10,6 +10,7 @@ in
 {
   imports = [
     ../../home/default.nix
+    ../../home/gui.nix
     ./restic/home.nix
   ];
 

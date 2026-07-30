@@ -207,6 +207,7 @@
         pkgs = ocfPkgs;
         modules = [
           ./home/config.nix
+          ./home/gui.nix
           ./hosts/ocf/desktop.nix
         ];
         extraSpecialArgs = { inherit inputs; };
