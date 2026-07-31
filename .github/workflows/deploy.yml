@@ -7,6 +7,21 @@ on:
       - completed
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      method:
+        description: "Method"
+        required: true
+        default: "switch"
+        type: choice
+        options:
+        - switch
+        - boot
+        - test
+      machines:
+        description: "Machines"
+        required: false
+        type: string
 
 permissions:
   id-token: write
@@ -35,4 +50,14 @@ jobs:
 
       - name: Colmena apply
         run: |
-          nix develop -c colmena apply
+          if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "auto deploy..."
+            nix develop -c colmena apply
+          elif [ "${{ github.event.inputs.machines }}" == "" ]; then
+            echo "manual deploy (all machines)..."
+            nix develop -c colmena apply ${{ github.event.inputs.method }}
+          else
+            echo "manual deploy (specific machines)..."
+            nix develop -c colmena apply --on ${{ github.event.inputs.machines }} ${{ github.event.inputs.method }}
+          fi
+
