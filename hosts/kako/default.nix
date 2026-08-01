@@ -10,6 +10,7 @@
     ./networking.nix
     ./services/default.nix
     ../../modules/default.nix
+    ../../modules/no-gui.nix
   ];
 
   # Enable QEMU guest agent for Oracle Cloud

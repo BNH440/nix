@@ -1,12 +1,13 @@
 {
   lib,
+  pkgs,
   ...
 }:
 
 {
   programs.wezterm = {
     enable = true;
-    enableZshIntegration = true;
+    enableZshIntegration = pkgs.stdenv.hostPlatform.isDarwin;
     settings = {
       color_scheme = "kafDark";
       font = lib.generators.mkLuaInline ''wezterm.font("MesloLGS NF")'';

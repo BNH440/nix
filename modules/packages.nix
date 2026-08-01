@@ -16,7 +16,6 @@
     fastfetch
     git
     dig
-    wezterm # for multiplexing
 
     # Cache
     inputs.niks3.packages.${pkgs.stdenv.hostPlatform.system}.niks3

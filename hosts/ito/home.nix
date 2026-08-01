@@ -6,6 +6,7 @@
 {
   imports = [
     ../../home/default.nix
+    ../../home/gui.nix
   ];
 
   # autostart
