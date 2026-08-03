@@ -191,6 +191,10 @@
         hostname = "koi";
         forwardAgent = true;
       };
+      "spike" = {
+        hostname = "spike";
+        forwardAgent = true;
+      };
     };
   };
 
