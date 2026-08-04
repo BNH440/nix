@@ -14,6 +14,7 @@
     ./audio.nix
     ./boot.nix
     ./tablet.nix
+    ./vm.nix
     # ./remote-desktop.nix
     ../../modules/default.nix
   ];
