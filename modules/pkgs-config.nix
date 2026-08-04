@@ -1,5 +1,6 @@
 {
   inputs,
+  pkgs,
   ...
 }:
 
@@ -21,4 +22,7 @@ in
     # https://github.com/bitwarden/clients/pull/20448
     "electron-39.8.10"
   ];
+
+  # set nix version manually to avoid libgit2 issue
+  nix.package = pkgs.unstable.nix;
 }

@@ -170,9 +170,6 @@ in
   nix.gc.automatic = true;
   nix.optimise.automatic = true;
 
-  # set nix version manually to avoid libgit2 issue
-  nix.package = pkgs.unstable.nix;
-
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = "aarch64-darwin";
 }
