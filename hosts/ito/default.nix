@@ -10,7 +10,6 @@
     ./graphical.nix
     ./disks.nix
     ./nvidia.nix
-    ./input.nix
     ./audio.nix
     ./boot.nix
     ./tablet.nix

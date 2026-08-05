@@ -1,20 +1,97 @@
 {
   pkgs,
   inputs,
+  lib,
   ...
 }:
 
+let
+  wallpaper = pkgs.fetchurl {
+    url = "https://files.blakehaug.com/share/wallpapers/kafu.png";
+    sha256 = "14bq4rna783jy0flmsm8g0ik64d100acr8j11rnq7s8nlnz5jbhs";
+  };
+in
 {
   imports = [ ];
 
-  # KDE
-  services.desktopManager.plasma6.enable = true;
-  services.displayManager.plasma-login-manager.enable = true;
+  # gnome
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
   services.xserver.enable = true;
-  programs.kdeconnect.enable = true;
+  services.gnome.gcr-ssh-agent.enable = lib.mkForce false;
+  systemd.services.power-profiles-daemon.enable = false;
+  environment.gnome.excludePackages = with pkgs; [
+    gnome-tour
+    power-profiles-daemon
+  ];
+  qt = {
+    enable = true;
+    platformTheme = "gnome";
+    style = "adwaita-dark";
+  };
+  i18n.inputMethod = {
+    enable = true;
+    type = "ibus";
+    ibus.engines = with pkgs.ibus-engines; [
+      mozc
+    ];
+  };
+  programs.dconf.profiles.user.databases = [
+    {
+      lockAll = true;
+      settings = {
+        "org/gnome/shell" = {
+          enabled-extensions = [
+            pkgs.gnomeExtensions.paperwm.extensionUuid
+            pkgs.gnomeExtensions.blur-my-shell.extensionUuid
+          ];
+        };
+        "org/gnome/desktop/interface" = {
+          color-scheme = "prefer-dark";
+          clock-format = "12h";
+          clock-show-weekday = true;
+          clock-show-seconds = true;
+        };
+        "org/gnome/desktop/calendar".show-weekdate = true; # add week numbers in calendar
+        "org/gnome/desktop/background" = {
+          color-shading-type = "solid";
+          picture-options = "zoom";
+          picture-uri = "file://" + wallpaper;
+          picture-uri-dark = "file://" + wallpaper;
+        };
+        "org/gnome/settings-daemon/plugins/color" = {
+          night-light-enabled = true;
+          night-light-schedule-from = 20.0;
+          night-light-schedule-to = 6.0;
+        };
+        "org/gnome/settings-daemon/plugins/power".sleep-inactive-ac-type = "nothing"; # no suspend
+        "org/gnome/desktop/session".idle-delay = lib.gvariant.mkUint32 1800; # screen off after 30mins
+        "org/gnome/desktop/input-sources" = {
+          sources = [
+            (lib.gvariant.mkTuple [
+              "xkb"
+              "us"
+            ])
+            (lib.gvariant.mkTuple [
+              "ibus"
+              "mozc-jp"
+            ])
+          ];
+        };
+        "org/gnome/desktop/wm/preferences".resize-with-right-button = true;
+        "org/gnome/shell/extensions/paperwm".show-workspace-indicator = false; # show workspace pill indicator
+      };
+    }
+  ];
 
   # Graphical apps
   environment.systemPackages = with pkgs; [
+    # gnome
+    gnomeExtensions.paperwm
+    gnomeExtensions.blur-my-shell
+
+    # Misc
+    kdePackages.konsole
     mpv
     zed-editor
     kdePackages.filelight

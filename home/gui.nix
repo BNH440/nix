@@ -12,8 +12,11 @@
       color_scheme = "kafDark";
       font = lib.generators.mkLuaInline ''wezterm.font("MesloLGS NF")'';
       hide_tab_bar_if_only_one_tab = false;
-      window_decorations = "INTEGRATED_BUTTONS|RESIZE";
-      font_size = 13;
+      window_decorations = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin "INTEGRATED_BUTTONS|RESIZE";
+      font_size = lib.mkMerge [
+        (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin 13)
+        (lib.mkIf pkgs.stdenv.hostPlatform.isLinux 11)
+      ];
       window_background_opacity = 0.98;
     };
     colorSchemes = {
