@@ -115,6 +115,8 @@
         bindkey '^[OF' end-of-line
         bindkey '^[[5~' beginning-of-buffer-or-history
         bindkey '^[[6~' end-of-buffer-or-history
+        bindkey "\e[1;3D" backward-word
+        bindkey "\e[1;3C" forward-word
       '')
     ];
   };
