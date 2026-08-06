@@ -49,6 +49,12 @@ in
             paperwm-patched.extensionUuid
             blur-my-shell.extensionUuid
           ];
+          favorite-apps = [
+            "zen.desktop"
+            "dev.zed.Zed.desktop"
+            "org.gnome.Nautilus.desktop"
+            "org.wezfurlong.wezterm.desktop"
+          ];
         };
         "org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";
