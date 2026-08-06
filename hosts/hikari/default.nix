@@ -38,7 +38,7 @@ in
     aerospace
     prismlauncher
     postman
-    obsidian
+    unstable.obsidian # fix build on darwin, not backported, see https://github.com/NixOS/nixpkgs/pull/548462
     notion-app
     mos
     halloy
