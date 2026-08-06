@@ -10,6 +10,14 @@ let
     url = "https://files.blakehaug.com/share/wallpapers/kafu.png";
     sha256 = "14bq4rna783jy0flmsm8g0ik64d100acr8j11rnq7s8nlnz5jbhs";
   };
+
+  paperwm-patched = (
+    pkgs.gnomeExtensions.paperwm.overrideAttrs (prevAttrs: {
+      patches = (prevAttrs.patches or [ ]) ++ [
+        ./paperwm-scroll-windows.patch
+      ];
+    })
+  );
 in
 {
   imports = [ ];
@@ -42,7 +50,7 @@ in
       settings = {
         "org/gnome/shell" = {
           enabled-extensions = with pkgs.gnomeExtensions; [
-            paperwm.extensionUuid
+            paperwm-patched.extensionUuid
             blur-my-shell.extensionUuid
           ];
         };
@@ -87,7 +95,7 @@ in
   # Graphical apps
   environment.systemPackages = with pkgs; [
     # gnome
-    gnomeExtensions.paperwm
+    paperwm-patched
     gnomeExtensions.blur-my-shell
 
     # Misc
