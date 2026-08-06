@@ -87,7 +87,11 @@ in
           ];
         };
         "org/gnome/desktop/wm/preferences".resize-with-right-button = true;
-        "org/gnome/shell/extensions/paperwm".show-workspace-indicator = false; # show workspace pill indicator
+        "org/gnome/shell/extensions/paperwm" = {
+          show-workspace-indicator = false; # show workspace pill indicator
+          selection-border-radius-top = lib.gvariant.mkInt32 12;
+          selection-border-radius-bottom = lib.gvariant.mkInt32 12;
+        };
       };
     }
   ];
