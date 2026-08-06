@@ -41,9 +41,9 @@ in
       lockAll = true;
       settings = {
         "org/gnome/shell" = {
-          enabled-extensions = [
-            pkgs.gnomeExtensions.paperwm.extensionUuid
-            pkgs.gnomeExtensions.blur-my-shell.extensionUuid
+          enabled-extensions = with pkgs.gnomeExtensions; [
+            paperwm.extensionUuid
+            blur-my-shell.extensionUuid
           ];
         };
         "org/gnome/desktop/interface" = {
