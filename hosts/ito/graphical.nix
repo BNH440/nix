@@ -32,11 +32,6 @@ in
     gnome-tour
     power-profiles-daemon
   ];
-  qt = {
-    enable = true;
-    platformTheme = "gnome";
-    style = "adwaita-dark";
-  };
   i18n.inputMethod = {
     enable = true;
     type = "ibus";
@@ -44,6 +39,7 @@ in
       mozc
     ];
   };
+  environment.sessionVariables.GTK_THEME = "Adwaita:dark";
   programs.dconf.profiles.user.databases = [
     {
       lockAll = true;
@@ -101,6 +97,12 @@ in
     # gnome
     paperwm-patched
     gnomeExtensions.blur-my-shell
+
+    # qt theming
+    qadwaitadecorations
+    qadwaitadecorations-qt6
+    qgnomeplatform
+    qgnomeplatform-qt6
 
     # Misc
     kdePackages.konsole
