@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   ...
 }:
 
@@ -68,6 +69,9 @@
     lokiUrl = "http://ronri:3100/loki/api/v1/push";
     zfsExporter.enable = true;
   };
+
+  # enable i2c for monitor brightness control
+  hardware.i2c.enable = true;
 
   # enable rasdaemon to monitor cpu crashes
   hardware.rasdaemon.enable = true;

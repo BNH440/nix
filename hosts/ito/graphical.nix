@@ -49,6 +49,7 @@ in
           enabled-extensions = with pkgs.gnomeExtensions; [
             paperwm-patched.extensionUuid
             blur-my-shell.extensionUuid
+            brightness-control-using-ddcutil.extensionUuid
           ];
           favorite-apps = [
             "zen.desktop"
@@ -101,7 +102,6 @@ in
           sort-directories-first = false;
         };
         "org/gnome/desktop/search-providers".disabled = [ "org.gnome.Epiphany.desktop" ];
-        "org/gnome/desktop/break-reminders".selected-breaks = [ "eyesight" ];
         "org/gnome/desktop/peripherals/mouse" = {
           accel-profile = "flat";
           speed = lib.gvariant.mkDouble 0.25;
@@ -112,6 +112,14 @@ in
             "<Alt>F4"
           ];
         };
+        "org/gnome/shell/extensions/display-brightness-ddcutil" = {
+          show-display-name = false;
+          allow-zero-brightness = true;
+          hide-system-indicator = true;
+          button-location = lib.gvariant.mkInt32 1;
+          increase-brightness-shortcut = [ "XF86MonBrightnessUp" ];
+          decrease-brightness-shortcut = [ "XF86MonBrightnessDown" ];
+        };
       };
     }
   ];
@@ -121,6 +129,8 @@ in
     # gnome
     paperwm-patched
     gnomeExtensions.blur-my-shell
+    gnomeExtensions.brightness-control-using-ddcutil
+    ddcutil
 
     # qt theming
     qadwaitadecorations
