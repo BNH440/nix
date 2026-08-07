@@ -1,15 +1,6 @@
 --- a/patches.js
 +++ b/patches.js
-@@ -16,7 +16,7 @@
- import * as WindowPreview from 'resource:///org/gnome/shell/ui/windowPreview.js';
- import * as Screenshot from 'resource:///org/gnome/shell/ui/screenshot.js';
- 
--import { Utils, Tiling, Scratch, Settings, OverviewLayout } from './imports.js';
-+import { Utils, Tiling, Scratch, Settings, OverviewLayout, Navigator } from './imports.js';
- 
- /**
-   Some of Gnome Shell's default behavior is really sub-optimal when using
-@@ -214,6 +214,29 @@
+@@ -214,6 +214,24 @@
      if (WindowManager.TouchpadWorkspaceSwitchAction) // disable 4-finger swipe
          registerOverridePrototype(WindowManager.TouchpadWorkspaceSwitchAction, '_checkActivated', () => false);
  
@@ -20,16 +11,11 @@
 +
 +            const direction = event.get_scroll_direction();
 +
-+            if (direction === Clutter.ScrollDirection.UP || direction === Clutter.ScrollDirection.DOWN) {
-+                const time = Date.now();
-+                if (this._paperwm_last_scroll && (time - this._paperwm_last_scroll) < 150) {
-+                    return Clutter.EVENT_STOP;
-+                }
-+                this._paperwm_last_scroll = time;
-+
-+                const tabPopup = Navigator.getActionDispatcher();
-+                const action = direction === Clutter.ScrollDirection.UP ? 'switch-global-right' : 'switch-global-left';
-+                tabPopup.show(false, action, Clutter.ModifierType.MOD4_MASK);
++            if (direction === Clutter.ScrollDirection.UP) {
++                Tiling.spaces?.activeSpace?.switchLeft(false);
++                return Clutter.EVENT_STOP;
++            } else if (direction === Clutter.ScrollDirection.DOWN) {
++                Tiling.spaces?.activeSpace?.switchRight(false);
 +                return Clutter.EVENT_STOP;
 +            }
 +                
@@ -39,50 +25,3 @@
      // disable swipe gesture trackers
      swipeTrackers.forEach(t => {
          registerOverrideProp(t, "enabled", false, false);
-@@ -445,6 +468,15 @@
-         this._icon.set_size(size * scaleFactor, size * scaleFactor);
-     });
- 
-+    registerOverridePrototype(AltTab.AppSwitcherPopup, '_scrollHandler', function(direction) {
-+        const saved = getSavedPrototype(AltTab.AppSwitcherPopup, '_scrollHandler');
-+        if (direction === Clutter.ScrollDirection.UP) {
-+            saved.call(this, Clutter.ScrollDirection.DOWN);
-+        } else if (direction === Clutter.ScrollDirection.DOWN) {
-+            saved.call(this, Clutter.ScrollDirection.UP);
-+        }
-+    });
-+
-     registerOverridePrototype(Screenshot.ScreenshotUI, 'open', async function(mode) {
-         const saved = getSavedPrototype(Screenshot.ScreenshotUI, 'open');
- 
---- a/tiling.js
-+++ b/tiling.js
-@@ -1971,11 +1971,11 @@
-                 switch (dir) {
-                 case Clutter.ScrollDirection.LEFT:
-                 case Clutter.ScrollDirection.UP:
--                    this.switchLeft(false);
-+                    this.switchRight(false);
-                     break;
-                 case Clutter.ScrollDirection.RIGHT:
-                 case Clutter.ScrollDirection.DOWN:
--                    this.switchRight(false);
-+                    this.switchLeft(false);
-                     break;
-                 }
-             });
---- a/topbar.js
-+++ b/topbar.js
-@@ -181,10 +181,10 @@
-     let direction = event.get_scroll_direction();
-     switch (direction) {
-     case Clutter.ScrollDirection.DOWN:
--        Tiling.spaces?.activeSpace.switchRight(false);
-+        Tiling.spaces?.activeSpace.switchLeft(false);
-         break;
-     case Clutter.ScrollDirection.UP:
--        Tiling.spaces?.activeSpace.switchLeft(false);
-+        Tiling.spaces?.activeSpace.switchRight(false);
-         break;
-     }
-     const selected = Tiling.spaces?.activeSpace?.selectedWindow;

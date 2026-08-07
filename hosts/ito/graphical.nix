@@ -39,12 +39,13 @@ in
       mozc
     ];
   };
-  environment.sessionVariables.GTK_THEME = "Adwaita:dark";
+  # environment.sessionVariables.GTK_THEME = "Adwaita:dark";
   programs.dconf.profiles.user.databases = [
     {
       lockAll = true;
       settings = {
         "org/gnome/shell" = {
+          disable-user-extensions = false;
           enabled-extensions = with pkgs.gnomeExtensions; [
             paperwm-patched.extensionUuid
             blur-my-shell.extensionUuid
@@ -57,7 +58,7 @@ in
           ];
         };
         "org/gnome/desktop/interface" = {
-          color-scheme = "prefer-dark";
+          # color-scheme = "prefer-dark"; # added to ./home.nix instead
           clock-format = "12h";
           clock-show-weekday = true;
           clock-show-seconds = true;
@@ -93,6 +94,23 @@ in
           show-workspace-indicator = false; # show workspace pill indicator
           selection-border-radius-top = lib.gvariant.mkInt32 12;
           selection-border-radius-bottom = lib.gvariant.mkInt32 12;
+        };
+        "org/gnome/nautilus/preferences" = {
+          default-folder-viewer = "list-view";
+          show-delete-permanently = true;
+          sort-directories-first = false;
+        };
+        "org/gnome/desktop/search-providers".disabled = [ "org.gnome.Epiphany.desktop" ];
+        "org/gnome/desktop/break-reminders".selected-breaks = [ "eyesight" ];
+        "org/gnome/desktop/peripherals/mouse" = {
+          accel-profile = "flat";
+          speed = lib.gvariant.mkDouble 0.25;
+        };
+        "org/gnome/desktop/wm/keybindings" = {
+          close = [
+            "<Super>q"
+            "<Alt>F4"
+          ];
         };
       };
     }

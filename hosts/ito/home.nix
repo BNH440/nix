@@ -9,6 +9,12 @@
     ../../home/gui.nix
   ];
 
+  # gnome theme
+  gtk = {
+    enable = true;
+    colorScheme = "dark";
+  };
+
   # autostart
   home.file.".config/autostart/com.github.wwmm.easyeffects.desktop".text = ''
     [Desktop Entry]
