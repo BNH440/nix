@@ -1,6 +1,6 @@
 --- a/patches.js
 +++ b/patches.js
-@@ -214,6 +214,24 @@
+@@ -214,6 +214,26 @@
      if (WindowManager.TouchpadWorkspaceSwitchAction) // disable 4-finger swipe
          registerOverridePrototype(WindowManager.TouchpadWorkspaceSwitchAction, '_checkActivated', () => false);
  
@@ -12,10 +12,12 @@
 +            const direction = event.get_scroll_direction();
 +
 +            if (direction === Clutter.ScrollDirection.UP) {
-+                Tiling.spaces?.activeSpace?.switchLeft(false);
++                Tiling.spaces?.activeSpace?.switchLeft(true);
++                Tiling.spaces?.activeSpace?.selectedWindow?.activate?.(global.get_current_time());
 +                return Clutter.EVENT_STOP;
 +            } else if (direction === Clutter.ScrollDirection.DOWN) {
-+                Tiling.spaces?.activeSpace?.switchRight(false);
++                Tiling.spaces?.activeSpace?.switchRight(true);
++                Tiling.spaces?.activeSpace?.selectedWindow?.activate?.(global.get_current_time());
 +                return Clutter.EVENT_STOP;
 +            }
 +                
