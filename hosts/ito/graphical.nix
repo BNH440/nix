@@ -73,7 +73,7 @@ in
         };
         "org/gnome/settings-daemon/plugins/color" = {
           night-light-enabled = true;
-          night-light-schedule-from = 20.0;
+          night-light-schedule-from = 21.0;
           night-light-schedule-to = 6.0;
         };
         "org/gnome/settings-daemon/plugins/power".sleep-inactive-ac-type = "nothing"; # no suspend
