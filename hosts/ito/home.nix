@@ -1,5 +1,6 @@
 {
   pkgs,
+  inputs,
   ...
 }:
 
@@ -14,6 +15,9 @@
     enable = true;
     colorScheme = "dark";
   };
+
+  # steam theme
+  home.file.".steam/steam/millennium/themes/Adwaita".source = inputs.adwaita-steam;
 
   # autostart
   home.file.".config/autostart/com.github.wwmm.easyeffects.desktop".text = ''

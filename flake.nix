@@ -82,6 +82,11 @@
       url = "github:tomups/worktrees-scripts";
       flake = false;
     };
+    millennium.url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
+    adwaita-steam = {
+      url = "github:tkashkin/Adwaita-for-Steam";
+      flake = false;
+    };
   };
 
   outputs =
@@ -103,6 +108,8 @@
       ocf-nix,
       ocf-home-manager,
       git-worktree-scripts,
+      millennium,
+      adwaita-steam,
       ...
     }@inputs:
     let

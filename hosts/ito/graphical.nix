@@ -50,6 +50,7 @@ in
             paperwm-patched.extensionUuid
             blur-my-shell.extensionUuid
             brightness-control-using-ddcutil.extensionUuid
+            rounded-window-corners-reborn.extensionUuid
           ];
           favorite-apps = [
             "zen.desktop"
@@ -131,6 +132,7 @@ in
     gnomeExtensions.blur-my-shell
     gnomeExtensions.brightness-control-using-ddcutil
     ddcutil
+    gnomeExtensions.rounded-window-corners-reborn
 
     # qt theming
     qadwaitadecorations
@@ -178,10 +180,10 @@ in
   # Gaming
   programs.steam = {
     enable = true;
-    extraPackages = with pkgs; [
-      kdePackages.breeze # fix cursor theme
-    ];
+    package = pkgs.millennium-steam;
   };
+  nixpkgs.overlays = [ inputs.millennium.overlays.default ];
+  # see ./home.nix for theme config
 
   # Genshin (see https://github.com/ezKEa/aagl-gtk-on-nix)
   nix.settings = inputs.aagl.nixConfig;
