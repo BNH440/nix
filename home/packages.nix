@@ -34,7 +34,7 @@
     claude-code
     github-copilot-cli
     inputs.tsexit.packages.${pkgs.stdenv.hostPlatform.system}.default
-    teleport
+    teleport.client
     ncdu
     nil
     nixd
