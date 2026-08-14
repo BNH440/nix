@@ -18,6 +18,17 @@ let
       ];
     })
   );
+
+  nixpkgs-545762-drv = pkgs.applyPatches {
+    src = pkgs.path;
+    patches = [
+      (pkgs.fetchpatch2 {
+        url = "https://patch-diff.githubusercontent.com/raw/NixOS/nixpkgs/pull/545762.patch";
+        hash = "sha256-f1cQGZgwUWOzFPB43v8N3/k/REzJ3t2coH1xA3iRTck=";
+      })
+    ];
+  };
+  nixpkgs-545762 = import nixpkgs-545762-drv { inherit (pkgs.stdenv) system; };
 in
 {
   imports = [ ];
@@ -50,6 +61,7 @@ in
             paperwm-patched.extensionUuid
             blur-my-shell.extensionUuid
             brightness-control-using-ddcutil.extensionUuid
+            nixpkgs-545762.gnomeExtensions.copyous.extensionUuid
           ];
           favorite-apps = [
             "zen.desktop"
@@ -131,6 +143,7 @@ in
     gnomeExtensions.blur-my-shell
     gnomeExtensions.brightness-control-using-ddcutil
     ddcutil
+    nixpkgs-545762.gnomeExtensions.copyous
 
     # qt theming
     qadwaitadecorations
