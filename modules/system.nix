@@ -21,12 +21,6 @@
     "flakes"
   ];
 
-  # Binary cache
-  nix.settings.substituters = [ "https://nixcache.blakehaug.com" ];
-  nix.settings.trusted-public-keys = [
-    "nixcache.blakehaug.com-1:gCvj6d/XaSiX6YpelqVPX/kCZAfvAraN8BhtN22TG50="
-  ];
-
   age.secrets.niks3-auth-token.rekeyFile = ../secrets/niks3-auth-token.age;
 
   services.niks3-auto-upload = {

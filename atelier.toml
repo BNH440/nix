@@ -14,4 +14,22 @@ include = [
 
 exclude = [ ]
 
-substituters = [ "https://nixcache.blakehaug.com" ]
+substituters = [
+    "https://nixcache.blakehaug.com",
+    "https://nix-community.cachix.org", # nixvim
+    "https://cache.nixos-cuda.org", # nvidia
+    "https://ezkea.cachix.org" # aagl
+]
+trusted-public-keys = [
+    "nixcache.blakehaug.com-1:gCvj6d/XaSiX6YpelqVPX/kCZAfvAraN8BhtN22TG50=",
+    "nixcache.blakehaug.com:HA3O9E/cMwqguJQmIW49lnCTd7f8K6FnQC2aU0cPIxc=",
+    "main:gMJfiUKchtX1jmnXVUA3t54OMNLfCsTrj2nytssdU7A=",
+    
+    "cache.ocf.berkeley.edu-1:6n9lihkjExzagz8GYR1QY/ZthT/XAKOy+ju5Jxd6wBg=",
+    
+    "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=",
+    
+    "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M=",
+    
+    "ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="
+]
