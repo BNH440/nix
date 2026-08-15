@@ -132,6 +132,20 @@ in
           increase-brightness-shortcut = [ "XF86MonBrightnessUp" ];
           decrease-brightness-shortcut = [ "XF86MonBrightnessDown" ];
         };
+        "org/gnome/shell/extensions/copyous" = {
+          show-at-pointer = true;
+          auto-hide-search = true;
+          clipboard-orientation = "vertical";
+          clipboard-position-horizontal = "top";
+          clipboard-position-vertical = "fill";
+          dynamic-item-height = true;
+          "file-item/file-preview-visibility" = "file-info";
+          header-controls-visibility = "visible-on-hover";
+          item-height = lib.gvariant.mkInt32 100;
+          item-width = lib.gvariant.mkInt32 300;
+          "link-item/link-preview-orientation" = "horizontal";
+          show-header = false;
+        };
       };
     }
   ];
