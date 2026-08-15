@@ -6,9 +6,7 @@
 {
   imports = [ ];
 
-  environment.systemPackages = with pkgs; [
-    easyeffects
-  ];
+  # easyeffects defined in ./home.nix
 
   services.pipewire = {
     enable = true;

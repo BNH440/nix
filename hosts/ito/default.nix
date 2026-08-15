@@ -43,10 +43,10 @@
   services.pcscd.enable = true;
 
   # openrgb setup
-  services.hardware.openrgb.enable = true;
-  environment.systemPackages = with pkgs; [
-    openrgb
-  ];
+  services.hardware.openrgb = {
+    enable = true;
+    startupProfile = "profile";
+  };
 
   # fix crashes?
   boot.kernelParams = [

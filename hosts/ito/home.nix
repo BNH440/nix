@@ -15,29 +15,255 @@
     colorScheme = "dark";
   };
 
-  # autostart
-  home.file.".config/autostart/com.github.wwmm.easyeffects.desktop".text = ''
-    [Desktop Entry]
-    Name=Easy Effects
-    Comment=Easy Effects Service
-    Exec=${pkgs.easyeffects}/bin/easyeffects --hide-window --service-mode
-    Icon=com.github.wwmm.easyeffects
-    StartupNotify=false
-    Terminal=false
-    Type=Application
-    X-GNOME-Autostart-Phase=Application
-    X-KDE-autostart-phase=2
-  '';
-  home.file.".config/autostart/openrgb.desktop".text = ''
-    [Desktop Entry]
-    Type=Application
-    Exec=${pkgs.openrgb}/bin/openrgb --profile profile
-    Hidden=false
-    NoDisplay=false
-    X-GNOME-Autostart-enabled=true
-    Name=OpenRGB Profile
-    Comment=Autoloads OpenRGB profile on login
-  '';
+  # easyeffects
+  home.packages = [ pkgs.easyeffects ];
+  services.easyeffects = {
+    enable = true;
+    preset = "wh1000xm5";
+    extraPresets = {
+      wh1000xm5 = {
+        output = {
+          blocklist = [ ];
+          "equalizer#0" = {
+            balance = 0;
+            bypass = false;
+            input-gain = -5.79;
+            left = {
+              band0 = {
+                frequency = 105;
+                gain = -3.7;
+                mode = "APO (DR)";
+                mute = false;
+                q = 0.7;
+                slope = "x1";
+                solo = false;
+                type = "Lo-shelf";
+                width = 4;
+              };
+              band1 = {
+                frequency = 57.4;
+                gain = 0.9;
+                mode = "APO (DR)";
+                mute = false;
+                q = 1.31;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band2 = {
+                frequency = 117.9;
+                gain = -1.2;
+                mode = "APO (DR)";
+                mute = false;
+                q = 2.06;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band3 = {
+                frequency = 184.1;
+                gain = -5.2;
+                mode = "APO (DR)";
+                mute = false;
+                q = 1.02;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band4 = {
+                frequency = 574.2;
+                gain = 1.9;
+                mode = "APO (DR)";
+                mute = false;
+                q = 1.84;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band5 = {
+                frequency = 1217.3;
+                gain = 3.3;
+                mode = "APO (DR)";
+                mute = false;
+                q = 2.33;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band6 = {
+                frequency = 2413;
+                gain = 6.9;
+                mode = "APO (DR)";
+                mute = false;
+                q = 1.61;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band7 = {
+                frequency = 3148;
+                gain = -5.3;
+                mode = "APO (DR)";
+                mute = false;
+                q = 2.76;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band8 = {
+                frequency = 6076.3;
+                gain = -2.6;
+                mode = "APO (DR)";
+                mute = false;
+                q = 5.22;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band9 = {
+                frequency = 10000;
+                gain = 4.9;
+                mode = "APO (DR)";
+                mute = false;
+                q = 0.7;
+                slope = "x1";
+                solo = false;
+                type = "Hi-shelf";
+                width = 4;
+              };
+            };
+            mode = "IIR";
+            num-bands = 10;
+            output-gain = 0;
+            pitch-left = 0;
+            pitch-right = 0;
+            right = {
+              band0 = {
+                frequency = 105;
+                gain = -3.7;
+                mode = "APO (DR)";
+                mute = false;
+                q = 0.7;
+                slope = "x1";
+                solo = false;
+                type = "Lo-shelf";
+                width = 4;
+              };
+              band1 = {
+                frequency = 57.4;
+                gain = 0.9;
+                mode = "APO (DR)";
+                mute = false;
+                q = 1.31;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band2 = {
+                frequency = 117.9;
+                gain = -1.2;
+                mode = "APO (DR)";
+                mute = false;
+                q = 2.06;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band3 = {
+                frequency = 184.1;
+                gain = -5.2;
+                mode = "APO (DR)";
+                mute = false;
+                q = 1.02;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band4 = {
+                frequency = 574.2;
+                gain = 1.9;
+                mode = "APO (DR)";
+                mute = false;
+                q = 1.84;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band5 = {
+                frequency = 1217.3;
+                gain = 3.3;
+                mode = "APO (DR)";
+                mute = false;
+                q = 2.33;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band6 = {
+                frequency = 2413;
+                gain = 6.9;
+                mode = "APO (DR)";
+                mute = false;
+                q = 1.61;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band7 = {
+                frequency = 3148;
+                gain = -5.3;
+                mode = "APO (DR)";
+                mute = false;
+                q = 2.76;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band8 = {
+                frequency = 6076.3;
+                gain = -2.6;
+                mode = "APO (DR)";
+                mute = false;
+                q = 5.22;
+                slope = "x1";
+                solo = false;
+                type = "Bell";
+                width = 4;
+              };
+              band9 = {
+                frequency = 10000;
+                gain = 4.9;
+                mode = "APO (DR)";
+                mute = false;
+                q = 0.7;
+                slope = "x1";
+                solo = false;
+                type = "Hi-shelf";
+                width = 4;
+              };
+            };
+            split-channels = false;
+          };
+          plugins_order = [ "equalizer#0" ];
+        };
+      };
+    };
+  };
 
   # wallpaper engine
   # services.linux-wallpaperengine = {
