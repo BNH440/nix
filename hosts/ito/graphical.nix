@@ -193,6 +193,11 @@ in
     sublime
     sublime-merge
 
+    # libreoffice
+    libreoffice
+    hunspell
+    hunspellDicts.en-us
+
     # Gaming
     lutris
     protonplus
