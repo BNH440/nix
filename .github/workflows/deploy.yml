@@ -1,12 +1,8 @@
 name: Deploy
 
 on:
-  workflow_run:
-    workflows: ["Build and Cache"]
-    types:
-      - completed
-    branches:
-      - main
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
       method:
@@ -23,14 +19,24 @@ on:
         required: false
         type: string
 
+concurrency:
+  group: deploy-${{ github.ref || github.head_ref }}
+  cancel-in-progress: true
+
 permissions:
-  id-token: write
   contents: read
+  checks: write
+  id-token: write
 
 jobs:
+  build:
+    if: ${{ github.event_name != 'workflow_dispatch' }}
+    uses: $/.github/workflows/build.yml
   colmena-deploy:
     runs-on: ubuntu-latest
     environment: colmena-deploy
+    if: ${{ always() && (needs.build.result == 'success' || needs.build.result == 'skipped') }}
+    needs: build
     steps:
       - uses: actions/checkout@v7
 
