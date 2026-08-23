@@ -192,6 +192,7 @@ in
     tor-browser
     sublime
     sublime-merge
+    qpwgraph
 
     # libreoffice
     libreoffice
