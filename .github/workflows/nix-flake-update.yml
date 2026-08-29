@@ -31,3 +31,7 @@ jobs:
             dependencies
             automated
           commit-msg: "nix flake update"
+          pr-body: |
+            ```
+            {{ env.GIT_COMMIT_MESSAGE }}
+            ```
