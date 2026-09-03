@@ -46,6 +46,7 @@ in
     jetbrains.pycharm
     jetbrains.datagrip
     jetbrains.rust-rover
+    discord
 
     # CLI
     imagemagick
