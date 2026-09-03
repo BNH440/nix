@@ -31,8 +31,6 @@
     wakeonlan
     yubikey-manager
     yt-dlp
-    claude-code
-    github-copilot-cli
     inputs.tsexit.packages.${pkgs.stdenv.hostPlatform.system}.default
     teleport.client
     ncdu
