@@ -5,7 +5,8 @@
 }:
 
 let
-  publicURL = "files.blakehaug.com";
+  rootDomain = config.web.rootDomain;
+  publicURL = "files.${rootDomain}";
 in
 {
   age.secrets.blakeh-copyparty-password = {
@@ -95,7 +96,7 @@ in
       '';
     };
     virtualHosts."${publicURL}" = {
-      useACMEHost = "blakehaug.com";
+      useACMEHost = rootDomain;
       forceSSL = true;
       locations."/" = {
         proxyPass = "http://127.0.0.1:3923";
@@ -116,5 +117,5 @@ in
       };
     };
   };
-  security.acme.certs."blakehaug.com".extraDomainNames = [ "files.blakehaug.com" ];
+  security.acme.certs."${rootDomain}".extraDomainNames = [ publicURL ];
 }

@@ -7,7 +7,8 @@
 let
   cfg = config.services.forgejo;
   srv = cfg.settings.server;
-  publicURL = "git.blakehaug.com";
+  rootDomain = config.web.rootDomain;
+  publicURL = "git.${rootDomain}";
 in
 {
   age.secrets.forgejo-admin-password = {
@@ -44,12 +45,12 @@ in
 
   # NGINX config
   services.nginx.virtualHosts."${publicURL}" = {
-    useACMEHost = "blakehaug.com";
+    useACMEHost = rootDomain;
     forceSSL = true;
     extraConfig = ''
       client_max_body_size 512M;
     '';
     locations."/".proxyPass = "http://127.0.0.1:${toString srv.HTTP_PORT}";
   };
-  security.acme.certs."blakehaug.com".extraDomainNames = [ publicURL ];
+  security.acme.certs."${rootDomain}".extraDomainNames = [ publicURL ];
 }

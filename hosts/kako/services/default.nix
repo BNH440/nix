@@ -9,5 +9,8 @@
     ./git.nix
   ];
 
-  web.enable = true;
+  web = {
+    enable = true;
+    rootDomain = "kafu.observer";
+  };
 }
