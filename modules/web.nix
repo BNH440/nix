@@ -104,8 +104,8 @@ in
           email = cfg.acmeEmail;
           dnsProvider = "cloudflare";
           environmentFile = config.age.secrets.cloudflare-api-key.path;
+	  group = "nginx";
         };
-        certs."${cfg.rootDomain}".group = "nginx";
       };
     })
 
