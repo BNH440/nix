@@ -7,7 +7,7 @@
 
 let
   wallpaper = pkgs.fetchurl {
-    url = "https://files.blakehaug.com/share/wallpapers/kafu.png";
+    url = "https://files.kafu.observer/share/wallpapers/kafu.png";
     sha256 = "14bq4rna783jy0flmsm8g0ik64d100acr8j11rnq7s8nlnz5jbhs";
   };
 
