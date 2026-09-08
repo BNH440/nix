@@ -9,5 +9,5 @@
     ./git.nix
   ];
 
-  blakehaug-web.enable = true;
+  web.enable = true;
 }
