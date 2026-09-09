@@ -63,13 +63,6 @@
   # add udev rules for flashing qmk firmware
   services.udev.packages = [ pkgs.qmk-udev-rules ];
 
-  # stats to send to grafana
-  stats = {
-    enable = true;
-    lokiUrl = "http://ronri:3100/loki/api/v1/push";
-    zfsExporter.enable = true;
-  };
-
   # enable i2c for monitor brightness control
   hardware.i2c.enable = true;
 

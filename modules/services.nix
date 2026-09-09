@@ -70,4 +70,7 @@
     logRefusedConnections = false;
     logRefusedPackets = false;
   };
+
+  # enable stats reporting to grafana
+  stats.enable = true;
 }

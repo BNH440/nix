@@ -14,15 +14,15 @@ in
     lokiUrl = lib.mkOption {
       type = lib.types.str;
       default = "http://127.0.0.1:3100/loki/api/v1/push";
-      description = ''
-        Loki push endpoint Alloy forwards the systemd journal to. Defaults to a
-        Loki on the same host; point this at the monitoring host
-        (e.g. http://ronri:3100/loki/api/v1/push) when shipping remotely.
-      '';
     };
 
-    zfsExporter = {
-      enable = lib.mkEnableOption "Prometheus ZFS exporter";
+    grafanaHost = lib.mkOption {
+      type = lib.types.str;
+      default = "ronri";
+      description = ''
+        the host that runs grafana, grafana hosting will be enabled if the machine's
+        host matches this field and stats are enabled.
+      '';
     };
   };
 
@@ -59,19 +59,23 @@ in
 
         loki.write "local" {
           endpoint {
-            url = "${cfg.lokiUrl}"
+            url = "http://${cfg.grafanaHost}:3100/loki/api/v1/push"
           }
         }
       '';
     })
 
-    (lib.mkIf cfg.zfsExporter.enable {
+    (lib.mkIf (builtins.hasAttr "zfs" config.boot.supportedFilesystems) {
       services.prometheus.exporters.zfs.enable = true;
 
       # let prometheus scrape via tailscale
       networking.firewall.interfaces."tailscale0".allowedTCPPorts = [
         9134 # zfs
       ];
+    })
+
+    (lib.mkIf (cfg.grafanaHost == config.networking.hostName) {
+      grafana.enable = true;
     })
   ];
 }
