@@ -4,7 +4,7 @@
 
 {
   imports = [
-    ./web.nix
-    ./cache.nix
+    ./grafana.nix
+    ./stats.nix
   ];
 }
