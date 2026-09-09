@@ -57,7 +57,6 @@ in
 
         apiTokenFile = cfg.niks3-auth-token;
         signKeyFiles = [ cfg.niks3-signing-key ];
-        cacheUrl = "https://${cfg.publicURL}";
 
         oidc.providers.github = {
           issuer = "https://token.actions.githubusercontent.com";
@@ -110,6 +109,7 @@ in
 
         services.niks3 = {
           readProxy.enable = true;
+          cacheUrl = "https://${cfg.publicURL}";
           s3 = {
             endpoint = "${cfg.publicURL}:${toString dbPort}";
             useSSL = false;
@@ -120,7 +120,9 @@ in
 
     (lib.mkIf (cfg.enable && (cfg.db == "remote")) {
       services.niks3 = {
-        readProxy.enable = true;
+        readProxy.enable = false;
+        cacheUrl = "https://cache.kafu.observer";
+        serverUrl = "https://${cfg.publicURL}";
         s3 = {
           endpoint = "f5fa3320245d2a52b180ad0ccfc47e8f.r2.cloudflarestorage.com";
           useSSL = true;
