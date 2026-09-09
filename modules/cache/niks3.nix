@@ -9,7 +9,6 @@
 let
   cfg = config.niks3;
   rootDomain = config.web.rootDomain;
-  publicURL = "nixcache.${rootDomain}";
   githubRepo = "BNH440/nix";
   niks3Pkgs = inputs.niks3.packages.${pkgs.stdenv.hostPlatform.system};
 in
@@ -22,6 +21,10 @@ in
         "remote"
       ];
       default = "local-seaweedfs";
+    };
+    publicURL = lib.mkOption {
+      type = lib.types.str;
+      default = "cache.${rootDomain}";
     };
 
     niks3-auth-token = lib.mkOption {
@@ -54,11 +57,11 @@ in
 
         apiTokenFile = cfg.niks3-auth-token;
         signKeyFiles = [ cfg.niks3-signing-key ];
-        cacheUrl = "https://${publicURL}";
+        cacheUrl = "https://${cfg.publicURL}";
 
         oidc.providers.github = {
           issuer = "https://token.actions.githubusercontent.com";
-          audience = "https://${publicURL}";
+          audience = "https://${cfg.publicURL}";
           boundClaims = {
             repository = [ githubRepo ];
           };
@@ -66,7 +69,7 @@ in
 
         nginx = {
           enable = true;
-          domain = publicURL;
+          domain = cfg.publicURL;
           enableACME = false;
           forceSSL = true;
         };
@@ -80,16 +83,11 @@ in
         };
       };
 
-      systemd.services.niks3 = {
-        after = [ "seaweedfs.service" ];
-        requires = [ "seaweedfs.service" ];
-      };
-
-      services.nginx.virtualHosts.${publicURL} = {
+      services.nginx.virtualHosts.${cfg.publicURL} = {
         useACMEHost = rootDomain;
       };
 
-      security.acme.certs."${rootDomain}".extraDomainNames = [ publicURL ];
+      security.acme.certs."${rootDomain}".extraDomainNames = [ cfg.publicURL ];
     })
 
     (lib.mkIf (cfg.enable && (cfg.db == "local-seaweedfs")) (
@@ -99,16 +97,21 @@ in
       {
         niks3-db = {
           enable = true;
-          url = publicURL;
+          url = cfg.publicURL;
           port = dbPort;
           niks3-s3-access-key = cfg.niks3-s3-access-key;
           niks3-s3-secret-key = cfg.niks3-s3-secret-key;
         };
 
+        systemd.services.niks3 = {
+          after = [ "seaweedfs.service" ];
+          requires = [ "seaweedfs.service" ];
+        };
+
         services.niks3 = {
           readProxy.enable = true;
           s3 = {
-            endpoint = "${publicURL}:${toString dbPort}";
+            endpoint = "${cfg.publicURL}:${toString dbPort}";
             useSSL = false;
           };
         };
@@ -119,8 +122,9 @@ in
       services.niks3 = {
         readProxy.enable = true;
         s3 = {
-          endpoint = "cache.kafu.observer";
+          endpoint = "f5fa3320245d2a52b180ad0ccfc47e8f.r2.cloudflarestorage.com";
           useSSL = true;
+          region = "auto";
         };
       };
     })
