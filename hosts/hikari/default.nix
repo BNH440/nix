@@ -143,7 +143,7 @@ in
   nix.settings.trusted-users = [ "blakeh" ];
 
   networking.hostName = "hikari";
-  age.secrets.niks3-auth-token = {
+  age.secrets.niks3-auth-token-client = {
     owner = "blakeh";
     group = "staff";
     rekeyFile = ../../secrets/niks3-auth-token.age;
@@ -151,7 +151,7 @@ in
 
   environment.variables = {
     NIKS3_SERVER_URL = "https://nixcache.blakehaug.com";
-    NIKS3_AUTH_TOKEN_FILE = config.age.secrets.niks3-auth-token.path;
+    NIKS3_AUTH_TOKEN_FILE = config.age.secrets.niks3-auth-token-client.path;
   };
 
   # Set Git commit hash for darwin-version.
