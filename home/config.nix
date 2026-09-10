@@ -169,6 +169,13 @@
         forwardAgent = true;
       };
 
+      # backup
+      "backup" = {
+        hostname = "u666620.your-storagebox.de";
+        user = "u666620";
+        port = 23;
+      };
+
       # CSUA
       "soda" = {
         hostname = "soda";
