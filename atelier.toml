@@ -15,12 +15,14 @@ include = [
 exclude = [ ]
 
 substituters = [
-    "https://nixcache.blakehaug.com",
+    "https://cache.kafu.observer",
     "https://nix-community.cachix.org", # nixvim
     "https://cache.nixos-cuda.org", # nvidia
     "https://ezkea.cachix.org" # aagl
 ]
 trusted-public-keys = [
+    "cache-kako-observer-1:Ly6DJShV3zBJlekZNqsY7EX+bJ1XXoIw/2CKXl14OIA=",
+
     "nixcache.blakehaug.com-1:gCvj6d/XaSiX6YpelqVPX/kCZAfvAraN8BhtN22TG50=",
     "nixcache.blakehaug.com:HA3O9E/cMwqguJQmIW49lnCTd7f8K6FnQC2aU0cPIxc=",
     "main:gMJfiUKchtX1jmnXVUA3t54OMNLfCsTrj2nytssdU7A=",

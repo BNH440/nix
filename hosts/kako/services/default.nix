@@ -7,6 +7,7 @@
     ./minecraft/default.nix
     ./files.nix
     ./git.nix
+    ./cache.nix
   ];
 
   web = {
