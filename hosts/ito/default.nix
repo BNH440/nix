@@ -15,6 +15,7 @@
     ./boot.nix
     ./tablet.nix
     ./vm.nix
+    ./backup.nix
     # ./remote-desktop.nix
     ../../modules/default.nix
   ];
