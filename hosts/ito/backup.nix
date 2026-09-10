@@ -27,7 +27,10 @@
   services.restic.backups = {
     ito-zfs-backup = {
       paths = [ "/data" ];
-      exclude = [ "/data/games" ];
+      exclude = [
+        "/data/games"
+        "/data/backups"
+      ];
       repository = "sftp:backup:/home/restic/ito-zfs-backup";
       passwordFile = config.age.secrets.ito-restic-backup-password.path;
       initialize = true;

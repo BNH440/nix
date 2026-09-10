@@ -17,6 +17,7 @@
       backup-targets = [
         "pc"
         "onedrive"
+        "hetzner"
       ];
       exclude = [
         "Photo Booth Library"

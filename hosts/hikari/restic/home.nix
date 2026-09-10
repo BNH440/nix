@@ -12,6 +12,10 @@ let
     inherit passwordFile;
     repository = "rclone:onedrive:macbook-userfiles-backup";
   };
+  hetznerBackup = {
+    inherit passwordFile;
+    repository = "sftp:backup:/home/restic/macbook-userfiles-backup";
+  };
 in
 {
   services.restic = {
@@ -19,6 +23,7 @@ in
     backups = {
       pc = pcBackup;
       onedrive = onedriveBackup;
+      hetzner = hetznerBackup;
     };
   };
 }
