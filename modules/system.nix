@@ -26,11 +26,11 @@
   services.niks3-auto-upload = {
     enable = true;
     package = inputs.niks3.packages.${pkgs.stdenv.hostPlatform.system}.niks3-hook;
-    serverUrl = "https://nixcache.blakehaug.com";
+    serverUrl = "https://niks3.kafu.observer";
     authTokenFile = config.age.secrets.niks3-auth-token-client.path;
   };
   environment.sessionVariables = {
-    NIKS3_SERVER_URL = "https://nixcache.blakehaug.com";
+    NIKS3_SERVER_URL = "https://niks3.kafu.observer";
     NIKS3_AUTH_TOKEN_FILE = config.age.secrets.niks3-auth-token-client.path;
   };
 
