@@ -70,5 +70,14 @@
   # enable rasdaemon to monitor cpu crashes
   hardware.rasdaemon.enable = true;
 
+  # add wake-in script
+  environment.systemPackages = [
+    (pkgs.writeShellScriptBin "wake-in" ''
+      sudo sh -c "echo 0 > /sys/class/rtc/rtc0/wakealarm"
+      sudo sh -c "echo \`date '+%s' -d '+ $1'\` > /sys/class/rtc/rtc0/wakealarm"
+      sudo systemctl suspend
+    '')
+  ];
+
   system.stateVersion = "25.11";
 }
