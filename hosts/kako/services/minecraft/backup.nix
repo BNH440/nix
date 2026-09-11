@@ -1,16 +1,3 @@
-# Uses services.restic.backups (one job per repository).
-# Each job gets its own systemd service/timer, logs, and CLI wrapper.
-#
-# CLI wrappers are added to PATH automatically:
-#   restic-backups-minecraft-onedrive snapshots
-#   restic-backups-minecraft-pc snapshots
-#
-# Manual trigger:
-#   systemctl start restic-backups-minecraft-onedrive
-#
-# View logs:
-#   journalctl -u restic-backups-minecraft-onedrive
-
 {
   pkgs,
   config,
