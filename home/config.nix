@@ -29,6 +29,7 @@
       push.autoSetupRemote = true;
       remote.origin.fetch = "+refs/pull/*/head:refs/remotes/origin/pull/*";
       worktree.useRelativePaths = true;
+      rerere.enabled = true;
       alias =
         let
           wtadd = "!${inputs.git-worktree-scripts}/wtadd.sh";
