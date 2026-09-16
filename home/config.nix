@@ -18,8 +18,8 @@
     enable = true;
     settings = {
       user = {
-        name = "Blake Haug";
-        email = "blake@blakehaug.com";
+        name = "kafu-densha";
+        email = "git@kafu.observer";
       };
       commit.gpgsign = true;
       gpg.format = "ssh";
