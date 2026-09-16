@@ -8,6 +8,7 @@
   home.packages = with pkgs; [
     bat
     lsd
+    ripgrep
     ripgrep-all
     aria2
     btop
